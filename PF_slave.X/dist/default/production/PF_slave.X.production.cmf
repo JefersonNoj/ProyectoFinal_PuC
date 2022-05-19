@@ -11,7 +11,7 @@
 # All addresses and the length are given in unqualified hexadecimal
 # in delta units.  Any other numeric values are decimal.
 %PSECTS
-$C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
+$C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
 idloc IDLOC 5 2000 2000 4 2 1
 reset_vec CODE 0 0 0 3 2 1
 end_init CODE 0 10 10 3 2 1
@@ -19,16 +19,16 @@ config CONFIG 4 2007 2007 2 2 1
 $dist/default/production\PF_slave.X.production.o
 cinit CODE 0 13 13 10 2 1
 idloc IDLOC 5 2000 2000 4 2 1
-text1 CODE 0 CE7 CE7 51 2 1
-text2 CODE 0 F40 F40 C0 2 1
-text3 CODE 0 DD4 DD4 B2 2 1
-text4 CODE 0 E86 E86 BA 2 1
-text5 CODE 0 D38 D38 9C 2 1
+text1 CODE 0 CE7 CE7 5D 2 1
+text2 CODE 0 E92 E92 B4 2 1
+text3 CODE 0 DE0 DE0 B2 2 1
+text4 CODE 0 F46 F46 BA 2 1
+text5 CODE 0 D44 D44 9C 2 1
 text6 CODE 0 23 23 361 2 1
 text7 CODE 0 CC0 CC0 27 2 1
 text8 CODE 0 60C 60C 1DD 2 1
 text9 CODE 0 384 384 288 2 1
-maintext CODE 0 7E9 7E9 9 2 1
+maintext CODE 0 7E9 7E9 F 2 1
 cstackCOMMON COMMON 1 70 70 E 1 1
 cstackBANK0 BANK0 1 20 20 4F 1 1
 cstackBANK1 BANK1 1 A0 A0 11 1 1
@@ -49,13 +49,13 @@ BANK1 B8-EF 1
 BANK2 110-16F 1
 BANK3 190-1EF 1
 CONST 3-3 2
-CONST 7F2-CBF 2
+CONST 7F8-CBF 2
 CONST 1000-1FFF 2
 ENTRY 3-3 2
-ENTRY 7F2-CBF 2
+ENTRY 7F8-CBF 2
 ENTRY 1000-1FFF 2
 CODE 3-3 2
-CODE 7F2-CBF 2
+CODE 7F8-CBF 2
 CODE 1000-1FFF 2
 SFR0 0-1F 1
 SFR1 80-9F 1
@@ -63,10 +63,10 @@ SFR2 100-10F 1
 SFR3 180-18F 1
 EEDATA 2100-21FF 2
 STRCODE 3-3 2
-STRCODE 7F2-CBF 2
+STRCODE 7F8-CBF 2
 STRCODE 1000-1FFF 2
 STRING 3-3 2
-STRING 7F2-CBF 2
+STRING 7F8-CBF 2
 STRING 1000-1FFF 2
 # %LINETAB Section
 # This section enumerates the file/line to address mappings.
@@ -82,23 +82,23 @@ STRING 1000-1FFF 2
 # All other numeric values are in decimal.
 %LINETAB
 $dist/default/production\PF_slave.X.production.o
-13 cinit CODE >484:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-13 cinit CODE >487:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-13 cinit CODE >516:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-14 cinit CODE >517:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-15 cinit CODE >518:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-16 cinit CODE >521:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-17 cinit CODE >522:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-18 cinit CODE >523:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-19 cinit CODE >524:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-1A cinit CODE >525:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-1B cinit CODE >526:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-1C cinit CODE >527:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-1D cinit CODE >528:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-1E cinit CODE >529:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-1F cinit CODE >535:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-1F cinit CODE >537:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
-20 cinit CODE >538:C:\Users\usuario\AppData\Local\Temp\xcAsal0.s
+13 cinit CODE >491:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+13 cinit CODE >494:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+13 cinit CODE >523:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+14 cinit CODE >524:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+15 cinit CODE >525:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+16 cinit CODE >528:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+17 cinit CODE >529:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+18 cinit CODE >530:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+19 cinit CODE >531:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+1A cinit CODE >532:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+1B cinit CODE >533:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+1C cinit CODE >534:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+1D cinit CODE >535:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+1E cinit CODE >536:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+1F cinit CODE >542:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+1F cinit CODE >544:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
+20 cinit CODE >545:C:\Users\usuario\AppData\Local\Temp\xcAs5f8.s
 4 intentry CODE >48:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
 384 text9 CODE >10:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\sprcadd.c
 384 text9 CODE >21:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\sprcadd.c
@@ -595,151 +595,154 @@ FF text6 CODE >124:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\s
 377 text6 CODE >201:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\sprcmul.c
 37B text6 CODE >203:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\sprcmul.c
 383 text6 CODE >205:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\sprcmul.c
-D38 text5 CODE >43:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D38 text5 CODE >47:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D49 text5 CODE >48:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D52 text5 CODE >49:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D69 text5 CODE >49:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D6F text5 CODE >49:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D77 text5 CODE >50:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D78 text5 CODE >51:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D80 text5 CODE >52:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D82 text5 CODE >53:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D86 text5 CODE >54:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D89 text5 CODE >54:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D8E text5 CODE >57:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D8F text5 CODE >57:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D95 text5 CODE >57:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-D97 text5 CODE >58:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DA4 text5 CODE >60:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DA6 text5 CODE >60:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DAB text5 CODE >63:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DAF text5 CODE >63:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DBA text5 CODE >64:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DBE text5 CODE >62:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DBE text5 CODE >65:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DC3 text5 CODE >67:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DC8 text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DCD text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DCF text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DD1 text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-DD3 text5 CODE >70:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
-E86 text4 CODE >10:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-E87 text4 CODE >15:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-E90 text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-E99 text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-E9B text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-E9D text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-E9F text4 CODE >17:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EA0 text4 CODE >19:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EA8 text4 CODE >20:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EA8 text4 CODE >21:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EAC text4 CODE >21:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EB0 text4 CODE >22:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EB9 text4 CODE >23:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EBD text4 CODE >24:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EBE text4 CODE >25:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EC2 text4 CODE >26:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EC3 text4 CODE >26:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EC9 text4 CODE >26:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-ECB text4 CODE >24:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-ED2 text4 CODE >29:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-ED6 text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-ED9 text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EDD text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EE1 text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EE4 text4 CODE >31:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EE5 text4 CODE >31:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EEB text4 CODE >31:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EED text4 CODE >28:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EED text4 CODE >32:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EF4 text4 CODE >34:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EF6 text4 CODE >35:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EF8 text4 CODE >35:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-EFF text4 CODE >33:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F05 text4 CODE >33:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F09 text4 CODE >37:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F0D text4 CODE >38:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F15 text4 CODE >39:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F17 text4 CODE >40:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F1D text4 CODE >40:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F23 text4 CODE >40:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F2D text4 CODE >41:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F36 text4 CODE >42:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F37 text4 CODE >43:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-F3F text4 CODE >44:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
-DD4 text3 CODE >141:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-DD7 text3 CODE >143:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-DF5 text3 CODE >143:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-E11 text3 CODE >143:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-E3F text3 CODE >143:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-E85 text3 CODE >144:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F40 text2 CODE >48:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F40 text2 CODE >49:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F46 text2 CODE >50:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F4D text2 CODE >51:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F55 text2 CODE >52:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F6E text2 CODE >53:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F72 text2 CODE >53:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F75 text2 CODE >53:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F7C text2 CODE >54:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F8D text2 CODE >55:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F91 text2 CODE >56:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F92 text2 CODE >57:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F97 text2 CODE >58:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-F9F text2 CODE >59:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FB8 text2 CODE >60:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FBC text2 CODE >60:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FBF text2 CODE >60:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FC6 text2 CODE >61:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FD7 text2 CODE >62:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FDD text2 CODE >62:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FEF text2 CODE >63:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FF2 text2 CODE >65:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-FF5 text2 CODE >69:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CE7 text1 CODE >80:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CE7 text1 CODE >81:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CEA text1 CODE >82:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CEB text1 CODE >84:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CEF text1 CODE >85:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CF2 text1 CODE >87:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CF8 text1 CODE >88:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CF9 text1 CODE >91:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CFA text1 CODE >92:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CFB text1 CODE >93:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-CFD text1 CODE >96:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D00 text1 CODE >97:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D02 text1 CODE >98:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D06 text1 CODE >99:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D08 text1 CODE >100:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D0A text1 CODE >103:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D0B text1 CODE >104:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D0F text1 CODE >105:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D11 text1 CODE >106:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D12 text1 CODE >107:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D13 text1 CODE >110:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D14 text1 CODE >111:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D44 text5 CODE >43:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D44 text5 CODE >47:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D55 text5 CODE >48:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D5E text5 CODE >49:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D75 text5 CODE >49:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D7B text5 CODE >49:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D83 text5 CODE >50:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D84 text5 CODE >51:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D8C text5 CODE >52:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D8E text5 CODE >53:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D92 text5 CODE >54:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D95 text5 CODE >54:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D9A text5 CODE >57:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+D9B text5 CODE >57:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DA1 text5 CODE >57:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DA3 text5 CODE >58:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DB0 text5 CODE >60:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DB2 text5 CODE >60:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DB7 text5 CODE >63:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DBB text5 CODE >63:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DC6 text5 CODE >64:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DCA text5 CODE >62:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DCA text5 CODE >65:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DCF text5 CODE >67:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DD4 text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DD9 text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DDB text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DDD text5 CODE >68:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+DDF text5 CODE >70:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\fltol.c
+F46 text4 CODE >10:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F47 text4 CODE >15:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F50 text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F59 text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F5B text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F5D text4 CODE >16:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F5F text4 CODE >17:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F60 text4 CODE >19:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F68 text4 CODE >20:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F68 text4 CODE >21:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F6C text4 CODE >21:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F70 text4 CODE >22:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F79 text4 CODE >23:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F7D text4 CODE >24:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F7E text4 CODE >25:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F82 text4 CODE >26:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F83 text4 CODE >26:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F89 text4 CODE >26:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F8B text4 CODE >24:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F92 text4 CODE >29:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F96 text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F99 text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+F9D text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FA1 text4 CODE >30:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FA4 text4 CODE >31:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FA5 text4 CODE >31:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FAB text4 CODE >31:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FAD text4 CODE >28:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FAD text4 CODE >32:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FB4 text4 CODE >34:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FB6 text4 CODE >35:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FB8 text4 CODE >35:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FBF text4 CODE >33:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FC5 text4 CODE >33:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FC9 text4 CODE >37:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FCD text4 CODE >38:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FD5 text4 CODE >39:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FD7 text4 CODE >40:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FDD text4 CODE >40:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FE3 text4 CODE >40:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FED text4 CODE >41:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FF6 text4 CODE >42:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FF7 text4 CODE >43:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+FFF text4 CODE >44:C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
+DE0 text3 CODE >150:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+DE3 text3 CODE >152:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E01 text3 CODE >152:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E1D text3 CODE >152:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E4B text3 CODE >152:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E91 text3 CODE >153:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E92 text2 CODE >48:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E92 text2 CODE >49:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E98 text2 CODE >51:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+E9E text2 CODE >53:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EA3 text2 CODE >54:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EBC text2 CODE >55:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EC0 text2 CODE >55:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EC3 text2 CODE >55:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+ECA text2 CODE >56:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EDB text2 CODE >57:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EDF text2 CODE >58:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EE0 text2 CODE >60:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EE5 text2 CODE >61:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+EFE text2 CODE >62:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F02 text2 CODE >62:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F05 text2 CODE >62:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F0C text2 CODE >63:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F1D text2 CODE >64:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F23 text2 CODE >64:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F35 text2 CODE >65:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F38 text2 CODE >68:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+F3B text2 CODE >72:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CE7 text1 CODE >85:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CE7 text1 CODE >86:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CEA text1 CODE >87:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CEB text1 CODE >89:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CEF text1 CODE >90:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CF2 text1 CODE >91:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CF5 text1 CODE >92:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CF8 text1 CODE >93:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CFB text1 CODE >94:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+CFE text1 CODE >96:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D04 text1 CODE >97:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D05 text1 CODE >100:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D06 text1 CODE >101:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D07 text1 CODE >102:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D09 text1 CODE >105:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D0C text1 CODE >106:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D0E text1 CODE >107:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D12 text1 CODE >108:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D14 text1 CODE >109:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
 D16 text1 CODE >112:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
 D17 text1 CODE >113:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
 D1B text1 CODE >114:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D1C text1 CODE >116:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D1F text1 CODE >117:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D20 text1 CODE >121:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D22 text1 CODE >122:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D25 text1 CODE >125:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D29 text1 CODE >126:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D2A text1 CODE >127:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D2B text1 CODE >129:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D2E text1 CODE >130:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D2F text1 CODE >132:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D32 text1 CODE >133:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D35 text1 CODE >134:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-D36 text1 CODE >135:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D1D text1 CODE >115:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D1E text1 CODE >116:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D1F text1 CODE >119:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D20 text1 CODE >120:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D22 text1 CODE >121:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D23 text1 CODE >122:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D27 text1 CODE >123:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D28 text1 CODE >125:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D2B text1 CODE >126:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D2C text1 CODE >130:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D2E text1 CODE >131:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D31 text1 CODE >134:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D35 text1 CODE >135:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D36 text1 CODE >136:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
 D37 text1 CODE >138:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-7E9 maintext CODE >72:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-7E9 maintext CODE >73:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-7EE maintext CODE >74:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
-7EE maintext CODE >76:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D3A text1 CODE >139:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D3B text1 CODE >141:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D3E text1 CODE >142:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D41 text1 CODE >143:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D42 text1 CODE >144:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+D43 text1 CODE >147:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+7E9 maintext CODE >75:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+7E9 maintext CODE >76:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+7EE maintext CODE >79:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
+7F2 maintext CODE >80:C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_slave.X\mainslave.c
 # %SYMTAB Section
 # An enumeration of all symbols in the program.
 # The beginning of the section is indicated by %SYMTAB.
@@ -766,25 +769,24 @@ map@y0 A7 0 BANK1 1 cstackBANK1 dist/default/production\PF_slave.X.production.o
 map@y1 A9 0 BANK1 1 cstackBANK1 dist/default/production\PF_slave.X.production.o
 __Hstrings 0 0 ABS 0 strings -
 _CCPR B3 0 BANK1 1 bssBANK1 dist/default/production\PF_slave.X.production.o
-___sp 0 0 STACK 2 stack C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
+___sp 0 0 STACK 2 stack C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
 _cont B5 0 BANK1 1 bssBANK1 dist/default/production\PF_slave.X.production.o
 _main FD2 0 CODE 0 maintext dist/default/production\PF_slave.X.production.o
 btemp 7E 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 map@x 6E 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
-start 20 0 CODE 0 init C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
+start 20 0 CODE 0 init C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
 ___flmul@aexp 4C 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___flmul@bexp 4D 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___flmul@prod 4E 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___flmul@sign 47 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___flmul@temp 52 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
-_POT2_slave B6 0 BANK1 1 bssBANK1 dist/default/production\PF_slave.X.production.o
 __Hpowerup 0 0 CODE 0 powerup -
-intlevel0 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
-intlevel1 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
-intlevel2 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
-intlevel3 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
-intlevel4 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
-intlevel5 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
+intlevel0 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
+intlevel1 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
+intlevel2 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
+intlevel3 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
+intlevel4 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
+intlevel5 0 0 ENTRY 0 functab C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
 _OSCCONbits 8F 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 wtemp0 7E 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 __Hfunctab 0 0 ENTRY 0 functab -
@@ -799,14 +801,15 @@ __Lmaintext 0 0 ABS 0 maintext -
 ___fldiv@aexp 39 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___fldiv@bexp 38 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___fldiv@sign 31 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
+_val_temp B7 0 BANK1 1 bssBANK1 dist/default/production\PF_slave.X.production.o
 __Umul8_16 1980 0 CODE 0 text7 dist/default/production\PF_slave.X.production.o
 __end_of___fladd C18 0 CODE 0 text9 dist/default/production\PF_slave.X.production.o
 __end_of___fldiv FD2 0 CODE 0 text8 dist/default/production\PF_slave.X.production.o
 __end_of___flmul 708 0 CODE 0 text6 dist/default/production\PF_slave.X.production.o
-__end_of___fltol 1BA8 0 CODE 0 text5 dist/default/production\PF_slave.X.production.o
+__end_of___fltol 1BC0 0 CODE 0 text5 dist/default/production\PF_slave.X.production.o
 __Umul8_16@multiplicand 70 0 COMMON 1 cstackCOMMON dist/default/production\PF_slave.X.production.o
-___stackhi 0 0 ABS 0 - C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
-___stacklo 0 0 ABS 0 - C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
+___stackhi 0 0 ABS 0 - C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
+___stacklo 0 0 ABS 0 - C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
 ___fladd@a 58 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___fladd@b 54 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 ___fldiv@a 20 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
@@ -818,7 +821,7 @@ _TRISCbits 87 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 __pcstackBANK0 20 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.production.o
 __pcstackBANK1 A0 0 BANK1 1 cstackBANK1 dist/default/production\PF_slave.X.production.o
 _SSPBUF 13 0 ABS 0 - dist/default/production\PF_slave.X.production.o
-___int_sp 0 0 STACK 2 stack C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
+___int_sp 0 0 STACK 2 stack C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
 __Hbank0 0 0 ABS 0 bank0 -
 __Hbank1 0 0 ABS 0 bank1 -
 __Hbank2 0 0 ABS 0 bank2 -
@@ -864,15 +867,15 @@ _PR2 92 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 __S0 1000 0 ABS 0 - -
 __S1 B8 0 ABS 0 - -
 __S3 0 0 ABS 0 - -
-_isr 1E80 0 CODE 0 text2 dist/default/production\PF_slave.X.production.o
-_map 1BA8 0 CODE 0 text3 dist/default/production\PF_slave.X.production.o
+_isr 1D24 0 CODE 0 text2 dist/default/production\PF_slave.X.production.o
+_map 1BC0 0 CODE 0 text3 dist/default/production\PF_slave.X.production.o
 saved_w 7E 0 ABS 0 - dist/default/production\PF_slave.X.production.o
-___xxtofl 1D0C 0 CODE 0 text4 dist/default/production\PF_slave.X.production.o
-__end_of_isr 2000 0 CODE 0 text2 dist/default/production\PF_slave.X.production.o
-__end_of_map 1D0C 0 CODE 0 text3 dist/default/production\PF_slave.X.production.o
+___xxtofl 1E8C 0 CODE 0 text4 dist/default/production\PF_slave.X.production.o
+__end_of_isr 1E8C 0 CODE 0 text2 dist/default/production\PF_slave.X.production.o
+__end_of_map 1D24 0 CODE 0 text3 dist/default/production\PF_slave.X.production.o
 __Lintentry 8 0 CODE 0 intentry -
-reset_vec 0 0 CODE 0 reset_vec C:\Users\usuario\AppData\Local\Temp\xcAsal0.o
-__end_of___xxtofl 1E80 0 CODE 0 text4 dist/default/production\PF_slave.X.production.o
+reset_vec 0 0 CODE 0 reset_vec C:\Users\usuario\AppData\Local\Temp\xcAs5f8.o
+__end_of___xxtofl 2000 0 CODE 0 text4 dist/default/production\PF_slave.X.production.o
 __LbssBANK0 0 0 ABS 0 bssBANK0 -
 __LbssBANK1 0 0 ABS 0 bssBANK1 -
 _PIE1bits 8C 0 ABS 0 - dist/default/production\PF_slave.X.production.o
@@ -880,7 +883,7 @@ ___fladd@signs 64 0 BANK0 1 cstackBANK0 dist/default/production\PF_slave.X.produ
 ___fladd 708 0 CODE 0 text9 dist/default/production\PF_slave.X.production.o
 ___fldiv C18 0 CODE 0 text8 dist/default/production\PF_slave.X.production.o
 ___flmul 46 0 CODE 0 text6 dist/default/production\PF_slave.X.production.o
-___fltol 1A70 0 CODE 0 text5 dist/default/production\PF_slave.X.production.o
+___fltol 1A88 0 CODE 0 text5 dist/default/production\PF_slave.X.production.o
 __pmaintext FD2 0 CODE 0 maintext dist/default/production\PF_slave.X.production.o
 __Umul8_16@multiplier 78 0 COMMON 1 cstackCOMMON dist/default/production\PF_slave.X.production.o
 __Lcommon 0 0 ABS 0 common -
@@ -911,12 +914,11 @@ __Lstrings 0 0 ABS 0 strings -
 __Hreset_vec 6 0 CODE 0 reset_vec -
 __HbssBANK0 0 0 ABS 0 bssBANK0 -
 __HbssBANK1 0 0 ABS 0 bssBANK1 -
-_POT1_slave B7 0 BANK1 1 bssBANK1 dist/default/production\PF_slave.X.production.o
 __ptext1 19CE 0 CODE 0 text1 dist/default/production\PF_slave.X.production.o
-__ptext2 1E80 0 CODE 0 text2 dist/default/production\PF_slave.X.production.o
-__ptext3 1BA8 0 CODE 0 text3 dist/default/production\PF_slave.X.production.o
-__ptext4 1D0C 0 CODE 0 text4 dist/default/production\PF_slave.X.production.o
-__ptext5 1A70 0 CODE 0 text5 dist/default/production\PF_slave.X.production.o
+__ptext2 1D24 0 CODE 0 text2 dist/default/production\PF_slave.X.production.o
+__ptext3 1BC0 0 CODE 0 text3 dist/default/production\PF_slave.X.production.o
+__ptext4 1E8C 0 CODE 0 text4 dist/default/production\PF_slave.X.production.o
+__ptext5 1A88 0 CODE 0 text5 dist/default/production\PF_slave.X.production.o
 __ptext6 46 0 CODE 0 text6 dist/default/production\PF_slave.X.production.o
 __ptext7 1980 0 CODE 0 text7 dist/default/production\PF_slave.X.production.o
 __ptext8 C18 0 CODE 0 text8 dist/default/production\PF_slave.X.production.o
@@ -936,14 +938,18 @@ __Lfunctab 0 0 ENTRY 0 functab -
 __Lclrtext 0 0 ABS 0 clrtext -
 __pcstackCOMMON 70 0 COMMON 1 cstackCOMMON dist/default/production\PF_slave.X.production.o
 __Hend_init 26 0 CODE 0 end_init -
-__end_of_main FE4 0 CODE 0 maintext dist/default/production\PF_slave.X.production.o
+__end_of_main FF0 0 CODE 0 maintext dist/default/production\PF_slave.X.production.o
 _CCP2CONbits 1D 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 _ANSEL 188 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 _PORTA 5 0 ABS 0 - dist/default/production\PF_slave.X.production.o
+_PORTB 6 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 _PORTC 7 0 ABS 0 - dist/default/production\PF_slave.X.production.o
+_PORTD 8 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 _TRISA 85 0 ABS 0 - dist/default/production\PF_slave.X.production.o
+_TRISB 86 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 _TRISC 87 0 ABS 0 - dist/default/production\PF_slave.X.production.o
-__end_of_setup 1A70 0 CODE 0 text1 dist/default/production\PF_slave.X.production.o
+_TRISD 88 0 ABS 0 - dist/default/production\PF_slave.X.production.o
+__end_of_setup 1A88 0 CODE 0 text1 dist/default/production\PF_slave.X.production.o
 __Hram 0 0 ABS 0 ram -
 __Lram 0 0 ABS 0 ram -
 interrupt_function 8 0 CODE 0 intentry dist/default/production\PF_slave.X.production.o
@@ -983,16 +989,16 @@ _CCP1CONbits 17 0 ABS 0 - dist/default/production\PF_slave.X.production.o
 # and size are in units of delta. The file address is in units of bytes.
 # All other numeric quantities are in decimal.
 %SEGMENTS
-text1 0 CE7 19CE 51 2
-text2 0 F40 1E80 C0 2
-text3 0 DD4 1BA8 B2 2
-text4 0 E86 1D0C BA 2
-text5 0 D38 1A70 9C 2
+text1 0 CE7 19CE 5D 2
+text2 0 E92 1D24 B4 2
+text3 0 DE0 1BC0 B2 2
+text4 0 F46 1E8C BA 2
+text5 0 D44 1A88 9C 2
 text7 0 CC0 1980 27 2
 cstackCOMMON 1 70 70 E 1
 cstackBANK0 1 20 20 50 1
 cstackBANK1 1 A0 A0 18 1
-intentry 0 4 8 7EE 2
+intentry 0 4 8 7F4 2
 reset_vec 0 0 0 3 2
 # %NOTES Section
 # This section contains data of all the note-psects.  The beginning of the section

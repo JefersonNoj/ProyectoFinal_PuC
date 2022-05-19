@@ -31,7 +31,7 @@
 #define IN_MIN 0            // Valor minimo de entrada del potenciometro
 #define IN_MAX 255          // Valor máximo de entrada del potenciometro
 #define OUT_MIN 61          // Valor minimo de ancho de pulso de señal PWM
-#define OUT_MAX 125         // Valor máximo de ancho de pulso de señal PWM
+#define OUT_MAX 126         // Valor máximo de ancho de pulso de señal PWM
 
 // VARIABLES -------------------------------------------------------------------
 char val_temp = 0;
@@ -47,21 +47,24 @@ unsigned short map(uint8_t val, uint8_t in_min, uint8_t in_max,
 // INTERRUPCIONES --------------------------------------------------------------
 void __interrupt() isr (void){
     if (PIR1bits.SSPIF){
+           
+        val_temp = SSPBUF;
+        
         if (cont == 0){
-            POT1_slave = SSPBUF;              // Leer buffer
-            CCPR = map(POT1_slave, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
+            CCPR = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX);
             CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
             CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
             cont = 1;
         }
+            
         else if (cont == 1){
-            POT2_slave = SSPBUF;
-            CCPR_2 = map(POT2_slave, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
+            CCPR_2 = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
             CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
             CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
             CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
             cont = 0;
         }
+        
         PIR1bits.SSPIF = 0;             // Limpiamos bandera de interrupción
     }
     
@@ -73,6 +76,8 @@ void main(void) {
     setup();
     while(1){        
         // Envio y recepcion de datos en maestro
+        PORTB = CCPR1L;
+        PORTD = CCPR2L;
     }
     return;
 }
@@ -82,7 +87,11 @@ void setup(void){
     ANSELH = 0;
     
     TRISA = 0b00100000;         // RA5 (SS) como entrada
-    PORTA = 0;  
+    PORTA = 0;
+    TRISB = 0;
+    PORTB = 0; 
+    TRISD = 0;
+    PORTD = 0; 
     
     OSCCONbits.IRCF = 0b100;    // 1MHz
     OSCCONbits.SCS = 1;         // Reloj interno

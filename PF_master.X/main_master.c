@@ -36,8 +36,8 @@
 //VARIABLES --------------------------------------------------------------------
 char val_temp = 0;
 char POT1_slave = 0, POT2_slave = 0;
-uint8_t canal = 0;
-unsigned short CCPR = 0, CCPR_2;    // Variable para almacenar ancho de pulso al hacer la interpolación lineal
+uint8_t canal = 0,flag_P3 = 0, flag_P4 = 0;
+unsigned short CCPR = 0, CCPR_2, POT1, POT2;    // Variable para almacenar ancho de pulso al hacer la interpolación lineal
 
 // PROTOTIPO DE FUNCIONES ------------------------------------------------------
 void setup(void);
@@ -64,12 +64,16 @@ void __interrupt() isr (void){
                 CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
                 break;
             case 2:
-                POT1_slave = ADRESH;    // Guardar el resultado de la conversión
+                //POT1 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
+                POT1_slave = ADRESH;
                 PORTB = POT1_slave;
+                //flag_P3 = 1;
                 break;
             case 3:
-                POT2_slave = ADRESH;    // Guardar el resultado de la conversión
+                //POT2 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
+                POT2_slave = ADRESH;
                 PORTD = POT2_slave;
+                //flag_P4 = 1;
                 break; 
         }
         PIR1bits.ADIF = 0;          // Limpiar bandera de interrupción del ADC
@@ -105,13 +109,16 @@ void main(void) {
         }
         
         // Enviar dato del POT3
-        SSPBUF = POT1_slave;         // Cargar valor del potenciómetro al buffer
-        while(!SSPSTATbits.BF){}    // Esperar a que termine el envio
+        SSPBUF = POT1_slave;            // Cargar valor del potenciómetro al buffer
+        while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
+        
+        __delay_ms(50);
         
         // Enviar dato del POT4
-        SSPBUF = POT2_slave;         // Cargar valor del potenciómetro al buffer
-        while(!SSPSTATbits.BF){}    // Esperar a que termine el envio 
+        SSPBUF = POT2_slave;            // Cargar valor del potenciómetro al buffer
+        while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
         
+        __delay_ms(50);
     }
     return;
 }

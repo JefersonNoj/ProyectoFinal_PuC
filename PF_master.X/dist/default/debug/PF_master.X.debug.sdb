@@ -21,11 +21,11 @@
 [v ___memcpyee __memcpyee `(v  1 e 1 0 ]
 "48 C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_master.X\main_master.c
 [v _isr isr `II(v  1 e 1 0 ]
-"86
+"84
 [v _main main `(v  1 e 1 0 ]
-"126
+"125
 [v _setup setup `(v  1 e 1 0 ]
-"202
+"201
 [v _map map `(us  1 e 2 0 ]
 "167 C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\pic\include\proc\pic16f887.h
 [v _PORTA PORTA `VEuc  1 e 1 @5 ]
@@ -272,33 +272,35 @@
 "40
 [v _CCPR CCPR `us  1 e 2 0 ]
 [v _CCPR_2 CCPR_2 `us  1 e 2 0 ]
-"86
+[v _POT1 POT1 `us  1 e 2 0 ]
+[v _POT2 POT2 `us  1 e 2 0 ]
+"84
 [v _main main `(v  1 e 1 0 ]
 {
-"124
+"123
 } 0
-"126
+"125
 [v _setup setup `(v  1 e 1 0 ]
 {
-"199
+"198
 } 0
 "48
 [v _isr isr `II(v  1 e 1 0 ]
 {
-"83
+"81
 } 0
-"202
+"201
 [v _map map `(us  1 e 2 0 ]
 {
 [v map@x x `uc  1 a 1 wreg ]
 [v map@x x `uc  1 a 1 wreg ]
 [v map@x0 x0 `uc  1 p 1 5 ]
 [v map@x1 x1 `uc  1 p 1 6 ]
-"203
+"202
 [v map@y0 y0 `us  1 p 2 7 ]
 [v map@y1 y1 `us  1 p 2 9 ]
 [v map@x x `uc  1 a 1 78 ]
-"205
+"204
 } 0
 "10 C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
 [v ___xxtofl __xxtofl `(d  1 e 4 0 ]
@@ -328,17 +330,17 @@
 "8 C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\sprcmul.c
 [v ___flmul __flmul `(d  1 e 4 0 ]
 {
-[s S817 . 4 `uc 1 a 1 0 `uc 1 b 1 1 `uc 1 c 1 2 `uc 1 d 1 3 ]
+[s S815 . 4 `uc 1 a 1 0 `uc 1 b 1 1 `uc 1 c 1 2 `uc 1 d 1 3 ]
 "13
-[s S822 . 4 `i 1 wordA 2 0 `i 1 wordB 2 2 ]
-[u S825 . 4 `l 1 i 4 0 `d 1 f 4 0 `S817 1 fAsBytes 4 0 `S822 1 fAsWords 4 0 ]
-[v ___flmul@prod prod `S825  1 a 4 46 ]
+[s S820 . 4 `i 1 wordA 2 0 `i 1 wordB 2 2 ]
+[u S823 . 4 `l 1 i 4 0 `d 1 f 4 0 `S815 1 fAsBytes 4 0 `S820 1 fAsWords 4 0 ]
+[v ___flmul@prod prod `S823  1 a 4 46 ]
 "12
 [v ___flmul@grs grs `ul  1 a 4 40 ]
-[s S894 . 2 `uc 1 a 1 0 `uc 1 b 1 1 ]
+[s S892 . 2 `uc 1 a 1 0 `uc 1 b 1 1 ]
 "14
-[u S897 . 2 `i 1 i 2 0 `ui 1 n 2 0 `S894 1 nAsBytes 2 0 ]
-[v ___flmul@temp temp `S897  1 a 2 50 ]
+[u S895 . 2 `i 1 i 2 0 `ui 1 n 2 0 `S892 1 nAsBytes 2 0 ]
+[v ___flmul@temp temp `S895  1 a 2 50 ]
 "10
 [v ___flmul@bexp bexp `uc  1 a 1 45 ]
 "11

@@ -2656,7 +2656,7 @@ extern __bank0 __bit __timeout;
 # 37 "main_master.c"
 char val_temp = 0;
 char POT1_slave = 0, POT2_slave = 0;
-uint8_t canal = 0,flag_P3 = 0, flag_P4 = 0;
+uint8_t canal = 0;
 unsigned short CCPR = 0, CCPR_2, POT1, POT2;
 
 
@@ -2684,16 +2684,14 @@ void __attribute__((picinterrupt(("")))) isr (void){
                 CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
                 break;
             case 2:
-
-                POT1_slave = ADRESH;
+                POT1 = map(ADRESH, 0, 255, 61, 126);
+                POT1_slave = (char)POT1;
                 PORTB = POT1_slave;
-
                 break;
             case 3:
-
-                POT2_slave = ADRESH;
+                POT2 = map(ADRESH, 0, 255, 61, 126);
+                POT2_slave = (char)POT2;
                 PORTD = POT2_slave;
-
                 break;
         }
         PIR1bits.ADIF = 0;
@@ -2732,13 +2730,14 @@ void main(void) {
         SSPBUF = POT1_slave;
         while(!SSPSTATbits.BF){}
 
-        _delay((unsigned long)((50)*(1000000/4000.0)));
+
+        SSPBUF = 0xFF;
+        while(!SSPSTATbits.BF){}
 
 
         SSPBUF = POT2_slave;
         while(!SSPSTATbits.BF){}
 
-        _delay((unsigned long)((50)*(1000000/4000.0)));
     }
     return;
 }

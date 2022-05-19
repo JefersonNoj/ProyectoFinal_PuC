@@ -2667,21 +2667,24 @@ unsigned short map(uint8_t val, uint8_t in_min, uint8_t in_max,
 
 void __attribute__((picinterrupt(("")))) isr (void){
     if (PIR1bits.SSPIF){
+
+        val_temp = SSPBUF;
+
         if (cont == 0){
-            POT1_slave = SSPBUF;
-            CCPR = map(POT1_slave, 0, 255, 61, 125);
+            CCPR = map(val_temp, 0, 255, 61, 126);
             CCPR1L = (uint8_t)(CCPR>>2);
             CCP1CONbits.DC1B = CCPR & 0b11;
             cont = 1;
         }
+
         else if (cont == 1){
-            POT2_slave = SSPBUF;
-            CCPR_2 = map(POT2_slave, 0, 255, 61, 125);
+            CCPR_2 = map(val_temp, 0, 255, 61, 126);
             CCPR2L = (uint8_t)(CCPR_2>>2);
             CCP2CONbits.DC2B0 = CCPR_2 & 0b01;
             CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
             cont = 0;
         }
+
         PIR1bits.SSPIF = 0;
     }
 
@@ -2693,6 +2696,8 @@ void main(void) {
     setup();
     while(1){
 
+        PORTB = CCPR1L;
+        PORTD = CCPR2L;
     }
     return;
 }
@@ -2703,6 +2708,10 @@ void setup(void){
 
     TRISA = 0b00100000;
     PORTA = 0;
+    TRISB = 0;
+    PORTB = 0;
+    TRISD = 0;
+    PORTD = 0;
 
     OSCCONbits.IRCF = 0b100;
     OSCCONbits.SCS = 1;
