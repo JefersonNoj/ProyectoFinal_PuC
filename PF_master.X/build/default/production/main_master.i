@@ -2654,15 +2654,19 @@ extern __bank0 __bit __timeout;
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.35\\pic\\include\\c90\\stdint.h" 1 3
 # 26 "main_master.c" 2
 # 37 "main_master.c"
-char val_temp = 0;
-char POT1_slave = 0, POT2_slave = 0;
-uint8_t canal = 0,flag_P3 = 0, flag_P4 = 0;
+char val_temp = 0, POT1_slave = 0, POT2_slave = 0;
 unsigned short CCPR = 0, CCPR_2, POT1, POT2;
+uint8_t canal = 0, address = 0, MODO = 0, write_fg = 0, read_fg = 0;
+char array[4] = {};
+char addresPos1[4]={0x00,0x01,0x02,0x03};
+char addresPos2[4]={0x04,0x05,0x06,0x07};
 
 
 void setup(void);
 unsigned short map(uint8_t val, uint8_t in_min, uint8_t in_max,
             unsigned short out_min, unsigned short out_max);
+uint8_t read_EEPROM(uint8_t address);
+void write_EEPROM(uint8_t address, uint8_t data);
 
 
 void __attribute__((picinterrupt(("")))) isr (void){
@@ -2673,30 +2677,74 @@ void __attribute__((picinterrupt(("")))) isr (void){
     if(PIR1bits.ADIF){
         switch(canal){
             case 0:
-                CCPR = map(ADRESH, 0, 255, 61, 126);
-                CCPR1L = (uint8_t)(CCPR>>2);
-                CCP1CONbits.DC1B = CCPR & 0b11;
+                if (MODO == 0){
+                    CCPR = map(ADRESH, 0, 255, 61, 126);
+                    CCPR1L = (uint8_t)(CCPR>>2);
+                    CCP1CONbits.DC1B = CCPR & 0b11;
+                    array[0] = (char)CCPR;
+                }
                 break;
             case 1:
-                CCPR_2 = map(ADRESH, 0, 255, 61, 126);
-                CCPR2L = (uint8_t)(CCPR_2>>2);
-                CCP2CONbits.DC2B0 = CCPR_2 & 0b01;
-                CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
+                if (MODO == 0){
+                    CCPR_2 = map(ADRESH, 0, 255, 61, 126);
+                    CCPR2L = (uint8_t)(CCPR_2>>2);
+                    CCP2CONbits.DC2B0 = CCPR_2 & 0b01;
+                    CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
+                    array[1] = (char)CCPR_2;
+                }
                 break;
             case 2:
-
                 POT1_slave = ADRESH;
-                PORTB = POT1_slave;
-
+                if (MODO == 0)
+                    array[2] = POT1_slave;
                 break;
             case 3:
-
                 POT2_slave = ADRESH;
-                PORTD = POT2_slave;
-
+                if (MODO == 0)
+                    array[3] = POT2_slave;
                 break;
         }
         PIR1bits.ADIF = 0;
+    }
+
+    if (INTCONbits.RBIF){
+        if (!PORTBbits.RB0){
+            MODO++;
+            if (MODO > 2)
+                MODO = 0;
+        }
+
+        else if (!PORTBbits.RB1){
+            switch(MODO){
+                case 0:
+                    write_fg = 1;
+                    address = 0x00;
+                    break;
+                case 1:
+                    read_fg = 1;
+                    address = 0x00;
+                    break;
+                case 2:
+                    break;
+            }
+        }
+
+        else if (!PORTBbits.RB2){
+            switch(MODO){
+                case 0:
+                    write_fg = 1;
+                    address = 0x05;
+                    break;
+                case 1:
+                    read_fg = 1;
+                    address = 0x05;
+                    break;
+                case 2:
+                    break;
+            }
+        }
+
+        INTCONbits.RBIF = 0;
     }
 
     return;
@@ -2706,6 +2754,8 @@ void __attribute__((picinterrupt(("")))) isr (void){
 void main(void) {
     setup();
     while(1){
+
+        PORTE = MODO;
 
         if(ADCON0bits.GO == 0){
             if(ADCON0bits.CHS == 0){
@@ -2728,17 +2778,61 @@ void main(void) {
             ADCON0bits.GO = 1;
         }
 
+        switch(MODO){
+            case 0:
 
-        SSPBUF = POT1_slave;
-        while(!SSPSTATbits.BF){}
+                SSPBUF = POT1_slave;
+                while(!SSPSTATbits.BF){}
+                _delay((unsigned long)((50)*(1000000/4000.0)));
 
-        _delay((unsigned long)((50)*(1000000/4000.0)));
+
+                SSPBUF = POT2_slave;
+                while(!SSPSTATbits.BF){}
+                _delay((unsigned long)((50)*(1000000/4000.0)));
+
+                if (write_fg){
+                    for (int i=0; i<4; ++i){
+                        write_EEPROM(address, (uint8_t)array[i]);
+                        _delay((unsigned long)((50)*(1000000/4000.0)));
+                        address++;
+                    }
+                    write_fg = 0;
+                }
+                break;
+
+            case 1:
+
+                if (read_fg){
+                    for (int j=0; j<4; ++j){
+                        array[j] = read_EEPROM(address);
+                        _delay((unsigned long)((50)*(1000000/4000.0)));
+                        address++;
+                    }
+
+                    CCPR1L = (array[0]>>2);
+                    CCP1CONbits.DC1B = array[0] & 0b11;
+
+                    CCPR2L = (array[1]>>2);
+                    CCP2CONbits.DC2B0 = array[1] & 0b01;
+                    CCP2CONbits.DC2B0 = (array[1] & 0b10)>>1;
 
 
-        SSPBUF = POT2_slave;
-        while(!SSPSTATbits.BF){}
+                    SSPBUF = array[2];
+                    while(!SSPSTATbits.BF){}
+                    _delay((unsigned long)((50)*(1000000/4000.0)));
 
-        _delay((unsigned long)((50)*(1000000/4000.0)));
+
+                    SSPBUF = array[3];
+                    while(!SSPSTATbits.BF){}
+                    _delay((unsigned long)((50)*(1000000/4000.0)));
+
+                    read_fg = 0;
+                }
+                break;
+
+            case 2:
+                break;
+        }
     }
     return;
 }
@@ -2747,13 +2841,19 @@ void setup(void){
     ANSEL = 0b00001111;
     ANSELH = 0;
 
-    TRISB = 0;
+    TRISB = 0b00000111;
     PORTB = 0;
     TRISD = 0;
     PORTD = 0;
+    TRISE = 0;
+    PORTE = 0;
 
     TRISA = 0b00001111;
     PORTA = 0;
+
+    OPTION_REGbits.nRBPU = 0;
+    WPUB = 0b00000111;
+    IOCB = 0b00000111;
 
     OSCCONbits.IRCF = 0b100;
     OSCCONbits.SCS = 1;
@@ -2816,10 +2916,36 @@ void setup(void){
     INTCONbits.PEIE = 1;
     PIE1bits.ADIE = 1;
     PIR1bits.ADIF = 0;
+    INTCONbits.RBIE = 1;
+    INTCONbits.RBIF = 0;
 }
 
 
 unsigned short map(uint8_t x, uint8_t x0, uint8_t x1,
             unsigned short y0, unsigned short y1){
     return (unsigned short)(y0+((float)(y1-y0)/(x1-x0))*(x-x0));
+}
+
+uint8_t read_EEPROM(uint8_t address){
+    EEADR = address;
+    EECON1bits.EEPGD = 0;
+    EECON1bits.RD = 1;
+    return EEDAT;
+}
+
+void write_EEPROM(uint8_t address, uint8_t data){
+    EEADR = address;
+    EEDAT = data;
+    EECON1bits.EEPGD = 0;
+    EECON1bits.WREN = 1;
+
+    INTCONbits.GIE = 0;
+    EECON2 = 0x55;
+    EECON2 = 0xAA;
+
+    EECON1bits.WR = 1;
+
+    EECON1bits.WREN = 0;
+    INTCONbits.RBIF = 0;
+    INTCONbits.GIE = 1;
 }

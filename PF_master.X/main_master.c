@@ -34,15 +34,19 @@
 #define OUT_MAX 126         // Valor máximo de ancho de pulso de señal PWM
 
 //VARIABLES --------------------------------------------------------------------
-char val_temp = 0;
-char POT1_slave = 0, POT2_slave = 0;
-uint8_t canal = 0,flag_P3 = 0, flag_P4 = 0;
+char val_temp = 0, POT1_slave = 0, POT2_slave = 0;
 unsigned short CCPR = 0, CCPR_2, POT1, POT2;    // Variable para almacenar ancho de pulso al hacer la interpolación lineal
+uint8_t canal = 0, address = 0, MODO = 0, write_fg = 0, read_fg = 0;
+char array[4] = {};
+char addresPos1[4]={0x00,0x01,0x02,0x03};
+char addresPos2[4]={0x04,0x05,0x06,0x07};
 
 // PROTOTIPO DE FUNCIONES ------------------------------------------------------
 void setup(void);
 unsigned short map(uint8_t val, uint8_t in_min, uint8_t in_max, 
             unsigned short out_min, unsigned short out_max);
+uint8_t read_EEPROM(uint8_t address);
+void write_EEPROM(uint8_t address, uint8_t data);
 
 // INTERRUPCIONES --------------------------------------------------------------
 void __interrupt() isr (void){
@@ -53,30 +57,74 @@ void __interrupt() isr (void){
     if(PIR1bits.ADIF){              // Verificar si ocurrió interrupción del ADC
         switch(canal){
             case 0:
-                CCPR = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
-                CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
-                CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
+                if (MODO == 0){
+                    CCPR = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
+                    CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
+                    CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
+                    array[0] = (char)CCPR;
+                }
                 break;
             case 1:
-                CCPR_2 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
-                CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
-                CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
-                CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
+                if (MODO == 0){
+                    CCPR_2 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
+                    CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
+                    CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
+                    CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
+                    array[1] = (char)CCPR_2;
+                }
                 break;
             case 2:
-                //POT1 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
                 POT1_slave = ADRESH;
-                PORTB = POT1_slave;
-                //flag_P3 = 1;
+                if (MODO == 0)
+                    array[2] = POT1_slave;
                 break;
             case 3:
-                //POT2 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
                 POT2_slave = ADRESH;
-                PORTD = POT2_slave;
-                //flag_P4 = 1;
+                if (MODO == 0)
+                    array[3] = POT2_slave;
                 break; 
         }
         PIR1bits.ADIF = 0;          // Limpiar bandera de interrupción del ADC
+    }
+    
+    if (INTCONbits.RBIF){      // Verificar si ocurrió interrupción del PORTB
+        if (!PORTBbits.RB0){
+            MODO++;
+            if (MODO > 2)
+                MODO = 0;
+        }
+        
+        else if (!PORTBbits.RB1){
+            switch(MODO){
+                case 0:
+                    write_fg = 1;
+                    address = 0x00;
+                    break;
+                case 1:
+                    read_fg = 1;
+                    address = 0x00;
+                    break;
+                case 2:
+                    break;
+            }
+        }
+        
+        else if (!PORTBbits.RB2){
+            switch(MODO){
+                case 0:
+                    write_fg = 1;
+                    address = 0x05;
+                    break;
+                case 1:
+                    read_fg = 1;
+                    address = 0x05;
+                    break;
+                case 2:
+                    break;
+            }
+        }
+            
+        INTCONbits.RBIF = 0;        // Limpiar bandera de interrupción del PORTB
     }
     
     return;
@@ -86,6 +134,8 @@ void __interrupt() isr (void){
 void main(void) {
     setup();
     while(1){        
+        
+        PORTE = MODO;
         
         if(ADCON0bits.GO == 0){             // Verificar qeu no hay proceso de conversión
             if(ADCON0bits.CHS == 0){
@@ -108,17 +158,61 @@ void main(void) {
             ADCON0bits.GO = 1;              // Iniciar porceso de conversión
         }
         
-        // Enviar dato del POT3
-        SSPBUF = POT1_slave;            // Cargar valor del potenciómetro al buffer
-        while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-        
-        __delay_ms(50);
-        
-        // Enviar dato del POT4
-        SSPBUF = POT2_slave;            // Cargar valor del potenciómetro al buffer
-        while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-        
-        __delay_ms(50);
+        switch(MODO){
+            case 0: 
+                // Enviar dato del POT3
+                SSPBUF = POT1_slave;            // Cargar valor del potenciómetro al buffer
+                while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
+                __delay_ms(50);
+
+                // Enviar dato del POT4
+                SSPBUF = POT2_slave;            // Cargar valor del potenciómetro al buffer
+                while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
+                __delay_ms(50);
+                
+                if (write_fg){
+                    for (int i=0; i<4; ++i){
+                        write_EEPROM(address, (uint8_t)array[i]);    // Escribir en la EEPROM
+                        __delay_ms(50);
+                        address++;
+                    }
+                    write_fg = 0;
+                }
+                break;
+                
+            case 1:
+                
+                if (read_fg){
+                    for (int j=0; j<4; ++j){
+                        array[j] = read_EEPROM(address);    // Leer de la EEPROM
+                        __delay_ms(50);
+                        address++;
+                    }
+                    
+                    CCPR1L = (array[0]>>2);    // Guardar los 8 bits mas significativos en CPR1L
+                    CCP1CONbits.DC1B = array[0] & 0b11; // Guardar los 2 bits menos significativos en DC1B
+                    
+                    CCPR2L = (array[1]>>2);      // Guardar los 8 bits mas significativos en CPR2L
+                    CCP2CONbits.DC2B0 = array[1] & 0b01;  // Guardar los 2 bits menos significativos en DC2B
+                    CCP2CONbits.DC2B0 = (array[1] & 0b10)>>1;
+                    
+                    // Enviar dato del POT3
+                    SSPBUF = array[2];            // Cargar valor del potenciómetro al buffer
+                    while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
+                    __delay_ms(50);
+
+                    // Enviar dato del POT4
+                    SSPBUF = array[3];            // Cargar valor del potenciómetro al buffer
+                    while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
+                    __delay_ms(50);
+                    
+                    read_fg = 0;
+                }        
+                break;
+                
+            case 2:
+                break;
+        }
     }
     return;
 }
@@ -127,13 +221,19 @@ void setup(void){
     ANSEL = 0b00001111;         // AN0 - AN3 como entradas
     ANSELH = 0;                 // I/O digitales para el PORTB
     
-    TRISB = 0;                  // PORTB como salida         
+    TRISB = 0b00000111;         // RB0 -> RB2 como entradas     
     PORTB = 0;
     TRISD = 0;                  // PORTD como salida         
     PORTD = 0;
+    TRISE = 0;                  // PORTE como salida         
+    PORTE = 0;
     
-    TRISA = 0b00001111;         // RA0 como entrada
-    PORTA = 0;          
+    TRISA = 0b00001111;         // RA0 -> RA3 como entradas
+    PORTA = 0;  
+    
+    OPTION_REGbits.nRBPU = 0;   // Habilitar resistencias pull-up
+    WPUB = 0b00000111;          // Habilitar pull-up para RB0, RB1 y RB2
+    IOCB = 0b00000111;          // Habilitar interrupciones On_change para RB0, RB1 y RB2
     
     OSCCONbits.IRCF = 0b100;    // 1MHz
     OSCCONbits.SCS = 1;         // Reloj interno
@@ -189,17 +289,43 @@ void setup(void){
     // SSPSTAT<7:6>
     SSPSTATbits.CKE = 1;        // Dato enviado cada flanco de subida
     SSPSTATbits.SMP = 1;        // Dato al final del pulso de reloj
-    SSPBUF = POT1_slave;       // Enviamos un dato inicial
+    SSPBUF = POT1_slave;        // Enviar un dato inicial
     
     // Configuración de interrupciones
     INTCONbits.GIE = 1;         // Habilitar interrupciones globales
     INTCONbits.PEIE = 1;        // Habilitar interrupciones de perifericos
     PIE1bits.ADIE = 1;          // Habilitar interrupción del ADC
     PIR1bits.ADIF = 0;          // Limpiar bandera del ADC
+    INTCONbits.RBIE = 1;        // Habilitar int. del PORTB
+    INTCONbits.RBIF = 0;        // Limpiar bandera del PORTB
 }
 
 // Función de mapeo (interpolación)
 unsigned short map(uint8_t x, uint8_t x0, uint8_t x1, 
             unsigned short y0, unsigned short y1){
     return (unsigned short)(y0+((float)(y1-y0)/(x1-x0))*(x-x0));
+}
+
+uint8_t read_EEPROM(uint8_t address){
+    EEADR = address;
+    EECON1bits.EEPGD = 0;       // Lectura a la EEPROM
+    EECON1bits.RD = 1;          // Obtenemos dato de la EEPROM
+    return EEDAT;               // Regresamos dato 
+}
+
+void write_EEPROM(uint8_t address, uint8_t data){
+    EEADR = address;
+    EEDAT = data;
+    EECON1bits.EEPGD = 0;       // Escritura a la EEPROM
+    EECON1bits.WREN = 1;        // Habilitamos escritura en la EEPROM
+    
+    INTCONbits.GIE = 0;         // Deshabilitamos interrupciones
+    EECON2 = 0x55;      
+    EECON2 = 0xAA;
+    
+    EECON1bits.WR = 1;          // Iniciamos escritura
+    
+    EECON1bits.WREN = 0;        // Deshabilitamos escritura en la EEPROM
+    INTCONbits.RBIF = 0;
+    INTCONbits.GIE = 1;         // Habilitamos interrupciones
 }
