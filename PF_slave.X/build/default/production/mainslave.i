@@ -2657,7 +2657,7 @@ extern __bank0 __bit __timeout;
 char val_temp = 0;
 char POT1_slave = 0, POT2_slave = 0;
 unsigned short CCPR = 0, CCPR_2;
-uint8_t cont = 0;
+uint8_t cont = 0, modo = 0;
 
 
 void setup(void);
@@ -2670,22 +2670,37 @@ void __attribute__((picinterrupt(("")))) isr (void){
 
         val_temp = SSPBUF;
 
-        if (cont == 0){
-            CCPR = map(val_temp, 0, 255, 61, 126);
-            CCPR1L = (uint8_t)(CCPR>>2);
-            CCP1CONbits.DC1B = CCPR & 0b11;
-            cont = 1;
+        if(modo == 2){
+            CCPR1L = (uint8_t)(val_temp>>2);
+            CCP1CONbits.DC1B = val_temp & 0b11;
         }
+        else{
+            if (cont == 0){
+                CCPR = map(val_temp, 0, 255, 60, 130);
+                CCPR1L = (uint8_t)(CCPR>>2);
+                CCP1CONbits.DC1B = CCPR & 0b11;
+                cont = 1;
+            }
 
-        else if (cont == 1){
-            CCPR_2 = map(val_temp, 0, 255, 61, 126);
-            CCPR2L = (uint8_t)(CCPR_2>>2);
-            CCP2CONbits.DC2B0 = CCPR_2 & 0b01;
-            CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
-            cont = 0;
+            else if (cont == 1){
+                CCPR_2 = map(val_temp, 0, 255, 60, 130);
+                CCPR2L = (uint8_t)(CCPR_2>>2);
+                CCP2CONbits.DC2B0 = CCPR_2 & 0b01;
+                CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
+                cont = 0;
+            }
         }
 
         PIR1bits.SSPIF = 0;
+    }
+
+    if (INTCONbits.RBIF){
+        if (!PORTBbits.RB0){
+            modo++;
+            if (modo > 2)
+                modo = 0;
+        }
+        INTCONbits.RBIF = 0;
     }
 
     return;
@@ -2696,8 +2711,8 @@ void main(void) {
     setup();
     while(1){
 
-        PORTB = CCPR1L;
-        PORTD = CCPR2L;
+
+        PORTE = modo;
     }
     return;
 }
@@ -2708,10 +2723,14 @@ void setup(void){
 
     TRISA = 0b00100000;
     PORTA = 0;
-    TRISB = 0;
+    TRISB = 0b00000001;
     PORTB = 0;
-    TRISD = 0;
-    PORTD = 0;
+    TRISE = 0;
+    PORTE = 0;
+
+    OPTION_REGbits.nRBPU = 0;
+    WPUB = 0b00000001;
+    IOCB = 0b00000001;
 
     OSCCONbits.IRCF = 0b100;
     OSCCONbits.SCS = 1;
@@ -2762,6 +2781,8 @@ void setup(void){
     PIE1bits.SSPIE = 1;
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
+    INTCONbits.RBIE = 1;
+    INTCONbits.RBIF = 0;
 
     return;
 }

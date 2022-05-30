@@ -1,6 +1,6 @@
 /* 
  * File:   main_master.c
- * Author: usuario
+ * Author: Jeferson Noj
  *
  * Created on 15 de mayo de 2022, 06:59 PM
  */
@@ -30,16 +30,14 @@
 #define FLAG_SPI 0xFF
 #define IN_MIN 0            // Valor minimo de entrada del potenciometro
 #define IN_MAX 255          // Valor máximo de entrada del potenciometro
-#define OUT_MIN 61          // Valor minimo de ancho de pulso de señal PWM
-#define OUT_MAX 126         // Valor máximo de ancho de pulso de señal PWM
+#define OUT_MIN 60          // Valor minimo de ancho de pulso de señal PWM
+#define OUT_MAX 130        // Valor máximo de ancho de pulso de señal PWM
 
 //VARIABLES --------------------------------------------------------------------
-char val_temp = 0, POT1_slave = 0, POT2_slave = 0;
-unsigned short CCPR = 0, CCPR_2, POT1, POT2;    // Variable para almacenar ancho de pulso al hacer la interpolación lineal
-uint8_t canal = 0, address = 0, MODO = 0, write_fg = 0, read_fg = 0;
+char val_temp = 0, POT1_slave = 0, POT2_slave = 0, SERIAL = 0, POT_compu = 0;
+unsigned short CCPR = 0, CCPR_2 = 0;    // Variable para almacenar ancho de pulso al hacer la interpolación lineal
+uint8_t canal = 0, address = 0, MODO = 0, write_fg = 0, read_fg = 0, selector = 0, POTc = 0, aviso = 0;
 char array[4] = {};
-char addresPos1[4]={0x00,0x01,0x02,0x03};
-char addresPos2[4]={0x04,0x05,0x06,0x07};
 
 // PROTOTIPO DE FUNCIONES ------------------------------------------------------
 void setup(void);
@@ -51,38 +49,34 @@ void write_EEPROM(uint8_t address, uint8_t data);
 // INTERRUPCIONES --------------------------------------------------------------
 void __interrupt() isr (void){
     if (PIR1bits.SSPIF){
-        PIR1bits.SSPIF = 0;         // Limpiar bandera de interrupción
+        PIR1bits.SSPIF = 0;         // Limpiar bandera de interrupción del SPI
     }
     
     if(PIR1bits.ADIF){              // Verificar si ocurrió interrupción del ADC
-        switch(canal){
-            case 0:
-                if (MODO == 0){
-                    CCPR = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
-                    CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
-                    CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
-                    array[0] = (char)CCPR;
-                }
-                break;
-            case 1:
-                if (MODO == 0){
-                    CCPR_2 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
-                    CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
-                    CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
-                    CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
-                    array[1] = (char)CCPR_2;
-                }
-                break;
-            case 2:
-                POT1_slave = ADRESH;
-                if (MODO == 0)
-                    array[2] = POT1_slave;
-                break;
-            case 3:
-                POT2_slave = ADRESH;
-                if (MODO == 0)
-                    array[3] = POT2_slave;
-                break; 
+        if (MODO == 0){
+            switch(canal){              // Evaluar canal que produjo la interrupción
+                case 0:
+                        CCPR = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
+                        CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
+                        CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
+                        array[0] = (char)CCPR;
+                    break;
+                case 1:
+                        CCPR_2 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
+                        CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
+                        CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
+                        CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
+                        array[1] = (char)CCPR_2;
+                    break;
+                case 2:
+                    POT1_slave = ADRESH;
+                        array[2] = POT1_slave;
+                    break;
+                case 3:
+                    POT2_slave = ADRESH;
+                        array[3] = POT2_slave;
+                    break; 
+            }
         }
         PIR1bits.ADIF = 0;          // Limpiar bandera de interrupción del ADC
     }
@@ -127,6 +121,10 @@ void __interrupt() isr (void){
         INTCONbits.RBIF = 0;        // Limpiar bandera de interrupción del PORTB
     }
     
+    if(PIR1bits.RCIF){
+        SERIAL = RCREG;
+    }
+    
     return;
 }
 
@@ -137,43 +135,44 @@ void main(void) {
         
         PORTE = MODO;
         
-        if(ADCON0bits.GO == 0){             // Verificar qeu no hay proceso de conversión
-            if(ADCON0bits.CHS == 0){
-                ADCON0bits.CHS = 1;         // Cambiar al canal AN1
-                canal = 1;
-            }
-            else if(ADCON0bits.CHS == 1){
-                ADCON0bits.CHS = 2;         // Cambiar al canal AN2
-                canal = 2;
-            }
-            else if(ADCON0bits.CHS == 2){
-                ADCON0bits.CHS = 3;         // Cambiar al canal AN3
-                canal = 3;
-            }
-            else if(ADCON0bits.CHS == 3){
-                ADCON0bits.CHS = 0;         // Cambiar al canal AN0
-                canal = 0;
-            }
-                __delay_us(40);             // Esperar 40 us (tiempo de adquisición)
-            ADCON0bits.GO = 1;              // Iniciar porceso de conversión
-        }
-        
         switch(MODO){
-            case 0: 
+            case 0:
+                
+                if(ADCON0bits.GO == 0){             // Verificar qeu no hay proceso de conversión
+                    if(ADCON0bits.CHS == 0){
+                        ADCON0bits.CHS = 1;         // Cambiar al canal AN1
+                        canal = 1;
+                    }
+                    else if(ADCON0bits.CHS == 1){
+                        ADCON0bits.CHS = 2;         // Cambiar al canal AN2
+                        canal = 2;
+                    }
+                    else if(ADCON0bits.CHS == 2){
+                        ADCON0bits.CHS = 3;         // Cambiar al canal AN3
+                        canal = 3;
+                    }
+                    else if(ADCON0bits.CHS == 3){
+                        ADCON0bits.CHS = 0;         // Cambiar al canal AN0
+                        canal = 0;
+                    }
+                        __delay_us(40);             // Esperar 40 us (tiempo de adquisición)
+                    ADCON0bits.GO = 1;              // Iniciar proceso de conversión
+                }
+                
                 // Enviar dato del POT3
                 SSPBUF = POT1_slave;            // Cargar valor del potenciómetro al buffer
                 while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-                __delay_ms(50);
+                __delay_ms(40);
 
                 // Enviar dato del POT4
                 SSPBUF = POT2_slave;            // Cargar valor del potenciómetro al buffer
                 while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-                __delay_ms(50);
+                __delay_ms(40);
                 
                 if (write_fg){
                     for (int i=0; i<4; ++i){
                         write_EEPROM(address, (uint8_t)array[i]);    // Escribir en la EEPROM
-                        __delay_ms(50);
+                        __delay_ms(25);
                         address++;
                     }
                     write_fg = 0;
@@ -185,7 +184,7 @@ void main(void) {
                 if (read_fg){
                     for (int j=0; j<4; ++j){
                         array[j] = read_EEPROM(address);    // Leer de la EEPROM
-                        __delay_ms(50);
+                        __delay_ms(25);
                         address++;
                     }
                     
@@ -198,20 +197,51 @@ void main(void) {
                     
                     // Enviar dato del POT3
                     SSPBUF = array[2];            // Cargar valor del potenciómetro al buffer
-                    while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-                    __delay_ms(50);
+                    while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
+                    __delay_ms(40);
 
                     // Enviar dato del POT4
                     SSPBUF = array[3];            // Cargar valor del potenciómetro al buffer
-                    while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-                    __delay_ms(50);
+                    while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
+                    __delay_ms(40);
                     
                     read_fg = 0;
                 }        
                 break;
                 
             case 2:
-                break;
+                PORTD = selector;
+                POT_compu = (uint8_t)(SERIAL & 0b00111111);
+                POTc = POT_compu + 60;
+                selector =  (uint8_t)(SERIAL & 0b11000000);
+                switch(selector){
+                    case 0b00000000:
+                        CCPR1L = (POTc>>2);        // Guardar los 8 bits mas significativos en CPR1L
+                        CCP1CONbits.DC1B = POTc & 0b11;; // Guardar los 2 bits menos significativos en DC1B
+                        break;
+                    case 0b01000000:
+                        CCPR2L = (POTc>>2);    // Guardar los 8 bits mas significativos en CPR2L
+                        CCP2CONbits.DC2B0 = POTc & 0b01;          // Guardar los 2 bits menos significativos en DC2B
+                        CCP2CONbits.DC2B0 = (POTc & 0b10)>>1;
+                        break;
+                    case 0b10000000:                        
+                        // Enviar dato para el servo 3
+                        SSPBUF = POTc;                // Cargar valor del potenciómetro al buffer
+                        while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
+                        __delay_ms(40);
+                        break;
+                    case 0b11000000:
+                        /*/
+                        SSPBUF = selector;            // Cargar valor del potenciómetro al buffer
+                        while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
+                        __delay_ms(40);
+                        
+                        // Enviar dato para el servo 4
+                        SSPBUF = POTc;                // Cargar valor del potenciómetro al buffer
+                        while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
+                        __delay_ms(40);*/
+                        break;
+                }
         }
     }
     return;
@@ -279,7 +309,9 @@ void setup(void){
     // Configuracion de SPI
     // Configs de Maestro
     
-    TRISC = 0b00010000;         // SDI entrada, SCK y SD0 como salida
+    TRISCbits.TRISC4 = 1;       // SDI entrada, SCK y SD0 como salida
+    TRISCbits.TRISC3 = 0;
+    TRISCbits.TRISC5 = 0;
     PORTC = 0;
     
     // SSPCON <5:0>
@@ -291,9 +323,26 @@ void setup(void){
     SSPSTATbits.SMP = 1;        // Dato al final del pulso de reloj
     SSPBUF = POT1_slave;        // Enviar un dato inicial
     
+    //Configuración de comunicacion serial
+    //SYNC = 0, BRGH = 1, BRG16 = 1, SPBRG=25 <- Valores de tabla 12-5
+    TXSTAbits.SYNC = 0;         // Comunicación ascincrona (full-duplex)
+    TXSTAbits.BRGH = 1;         // Baud rate de alta velocidad 
+    BAUDCTLbits.BRG16 = 1;      // 16-bits para generar el baud rate
+    
+    SPBRG = 25;
+    SPBRGH = 0;                 // Baud rate ~9600, error -> 0.16%
+    
+    RCSTAbits.SPEN = 1;         // Habilitar comunicación
+    RCSTAbits.RX9 = 0;          // Utilizar solo 8 bits para recepción 
+    
+    
+    TXSTAbits.TXEN = 1;       // Habilitar transmisor
+    RCSTAbits.CREN = 1;         // Habilitar receptor
+    
     // Configuración de interrupciones
     INTCONbits.GIE = 1;         // Habilitar interrupciones globales
     INTCONbits.PEIE = 1;        // Habilitar interrupciones de perifericos
+    PIE1bits.RCIE = 1;          // Habilitar Interrupciones de recepción
     PIE1bits.ADIE = 1;          // Habilitar interrupción del ADC
     PIR1bits.ADIF = 0;          // Limpiar bandera del ADC
     INTCONbits.RBIE = 1;        // Habilitar int. del PORTB

@@ -1,6 +1,6 @@
 /* 
  * File:   mainslave.c
- * Author: usuario
+ * Author: Jeferson Noj
  *
  * Created on 15 de mayo de 2022, 07:37 PM
  */
@@ -30,14 +30,14 @@
 #define FLAG_SPI 0xFF
 #define IN_MIN 0            // Valor minimo de entrada del potenciometro
 #define IN_MAX 255          // Valor máximo de entrada del potenciometro
-#define OUT_MIN 61          // Valor minimo de ancho de pulso de señal PWM
-#define OUT_MAX 126         // Valor máximo de ancho de pulso de señal PWM
+#define OUT_MIN 60          // Valor minimo de ancho de pulso de señal PWM
+#define OUT_MAX 130        // Valor máximo de ancho de pulso de señal PWM
 
 // VARIABLES -------------------------------------------------------------------
 char val_temp = 0;
 char POT1_slave = 0, POT2_slave = 0;
 unsigned short CCPR = 0, CCPR_2;   // Variable para almacenar ancho de pulso al hacer la interpolación lineal
-uint8_t cont = 0;
+uint8_t cont = 0, modo = 0;
 
 // PROTOTIPO DE FUNCIONES ------------------------------------------------------
 void setup(void);
@@ -50,22 +50,37 @@ void __interrupt() isr (void){
            
         val_temp = SSPBUF;
         
-        if (cont == 0){
-            CCPR = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX);
-            CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
-            CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
-            cont = 1;
+        if(modo == 2){
+            CCPR1L = (uint8_t)(val_temp>>2);    // Guardar los 8 bits mas significativos en CPR1L
+            CCP1CONbits.DC1B = val_temp & 0b11; // Guardar los 2 bits menos significativos en DC1B
         }
-            
-        else if (cont == 1){
-            CCPR_2 = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
-            CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
-            CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
-            CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
-            cont = 0;
+        else{
+            if (cont == 0){
+                CCPR = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX);
+                CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
+                CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
+                cont = 1;
+            }
+
+            else if (cont == 1){
+                CCPR_2 = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
+                CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
+                CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
+                CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
+                cont = 0;
+            }
         }
         
         PIR1bits.SSPIF = 0;             // Limpiamos bandera de interrupción
+    }
+    
+    if (INTCONbits.RBIF){      // Verificar si ocurrió interrupción del PORTB
+        if (!PORTBbits.RB0){
+            modo++;
+            if (modo > 2)
+                modo = 0;
+        }
+        INTCONbits.RBIF = 0;        // Limpiar bandera de interrupción del PORTB
     }
     
     return;
@@ -76,8 +91,8 @@ void main(void) {
     setup();
     while(1){        
         // Envio y recepcion de datos en maestro
-        PORTB = CCPR1L;
-        PORTD = CCPR2L;
+        //PORTB = CCPR1L;
+        PORTE = modo;
     }
     return;
 }
@@ -88,10 +103,14 @@ void setup(void){
     
     TRISA = 0b00100000;         // RA5 (SS) como entrada
     PORTA = 0;
-    TRISB = 0;
+    TRISB = 0b00000001;         // RB0 como entrada
     PORTB = 0; 
-    TRISD = 0;
-    PORTD = 0; 
+    TRISE = 0;
+    PORTE = 0; 
+    
+    OPTION_REGbits.nRBPU = 0;   // Habilitar resistencias pull-up
+    WPUB = 0b00000001;          // Habilitar pull-up para RB0, RB1 y RB2
+    IOCB = 0b00000001;          // Habilitar interrupciones On_change para RB0, RB1 y RB2
     
     OSCCONbits.IRCF = 0b100;    // 1MHz
     OSCCONbits.SCS = 1;         // Reloj interno
@@ -142,6 +161,8 @@ void setup(void){
     PIE1bits.SSPIE = 1;         // Habilitar int. de SPI
     INTCONbits.PEIE = 1;        // Habilitar int. de periféricos
     INTCONbits.GIE = 1;         // Habilitar int. globales
+    INTCONbits.RBIE = 1;        // Habilitar int. del PORTB
+    INTCONbits.RBIF = 0;        // Limpiar bandera del PORTB
     
     return;
 }
