@@ -19,17 +19,17 @@
 [v ___eecpymem __eecpymem `(v  1 e 1 0 ]
 "39
 [v ___memcpyee __memcpyee `(v  1 e 1 0 ]
-"50 C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_master.X\main_master.c
+"51 C:\Users\usuario\Desktop\UVG\Semestre5\PrograMicros\PF_master.X\main_master.c
 [v _isr isr `II(v  1 e 1 0 ]
-"132
+"133
 [v _main main `(v  1 e 1 0 ]
-"250
+"245
 [v _setup setup `(v  1 e 1 0 ]
-"353
+"347
 [v _map map `(us  1 e 2 0 ]
-"358
+"352
 [v _read_EEPROM read_EEPROM `(uc  1 e 1 0 ]
-"365
+"359
 [v _write_EEPROM write_EEPROM `(v  1 e 1 0 ]
 "167 C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\pic\include\proc\pic16f887.h
 [v _PORTA PORTA `VEuc  1 e 1 @5 ]
@@ -379,7 +379,6 @@
 [v _POT1_slave POT1_slave `uc  1 e 1 0 ]
 [v _POT2_slave POT2_slave `uc  1 e 1 0 ]
 [v _SERIAL SERIAL `uc  1 e 1 0 ]
-[v _POT_compu POT_compu `uc  1 e 1 0 ]
 "38
 [v _CCPR CCPR `us  1 e 2 0 ]
 [v _CCPR_2 CCPR_2 `us  1 e 2 0 ]
@@ -387,60 +386,62 @@
 [v _canal canal `uc  1 e 1 0 ]
 [v _address address `uc  1 e 1 0 ]
 [v _MODO MODO `uc  1 e 1 0 ]
+"40
 [v _write_fg write_fg `uc  1 e 1 0 ]
 [v _read_fg read_fg `uc  1 e 1 0 ]
 [v _selector selector `uc  1 e 1 0 ]
 [v _POTc POTc `uc  1 e 1 0 ]
-"40
+[v _flag flag `uc  1 e 1 0 ]
+"41
 [v _array array `[4]uc  1 e 4 0 ]
-"132
+"133
 [v _main main `(v  1 e 1 0 ]
 {
-"185
+"186
 [v main@j j `i  1 a 2 24 ]
-"173
+"174
 [v main@i i `i  1 a 2 22 ]
-"248
+"243
 } 0
-"365
+"359
 [v _write_EEPROM write_EEPROM `(v  1 e 1 0 ]
 {
 [v write_EEPROM@address address `uc  1 a 1 wreg ]
 [v write_EEPROM@address address `uc  1 a 1 wreg ]
 [v write_EEPROM@data data `uc  1 p 1 18 ]
 [v write_EEPROM@address address `uc  1 a 1 19 ]
-"380
+"374
 } 0
-"250
+"245
 [v _setup setup `(v  1 e 1 0 ]
 {
-"350
+"344
 } 0
-"358
+"352
 [v _read_EEPROM read_EEPROM `(uc  1 e 1 0 ]
 {
 [v read_EEPROM@address address `uc  1 a 1 wreg ]
 [v read_EEPROM@address address `uc  1 a 1 wreg ]
 [v read_EEPROM@address address `uc  1 a 1 18 ]
-"363
+"357
 } 0
-"50
+"51
 [v _isr isr `II(v  1 e 1 0 ]
 {
-"129
+"130
 } 0
-"353
+"347
 [v _map map `(us  1 e 2 0 ]
 {
 [v map@x x `uc  1 a 1 wreg ]
 [v map@x x `uc  1 a 1 wreg ]
 [v map@x0 x0 `uc  1 p 1 5 ]
 [v map@x1 x1 `uc  1 p 1 6 ]
-"354
+"348
 [v map@y0 y0 `us  1 p 2 7 ]
 [v map@y1 y1 `us  1 p 2 9 ]
 [v map@x x `uc  1 a 1 78 ]
-"356
+"350
 } 0
 "10 C:\Program Files\Microchip\xc8\v2.35\pic\sources\c90\common\xxtofl.c
 [v ___xxtofl __xxtofl `(d  1 e 4 0 ]

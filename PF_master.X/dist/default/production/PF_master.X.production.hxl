@@ -10,12 +10,12 @@
  Intel Hex-file ranges:
   0h - 5h		(dist/default/production\PF_master.X.production.hex)
   8h - FF3h		(dist/default/production\PF_master.X.production.hex)
-  12CAh - 1FFFh		(dist/default/production\PF_master.X.production.hex)
+  12DAh - 1FFFh		(dist/default/production\PF_master.X.production.hex)
   4000h - 4007h		(dist/default/production\PF_master.X.production.hex)
   400Eh - 4011h		(dist/default/production\PF_master.X.production.hex)
  Unused ranges:
   6h - 7h
-  FF4h - 12C9h
+  FF4h - 12D9h
   2000h - 3FFFh
   4008h - 400Dh
 
@@ -283,8 +283,7 @@
 00000FE0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 00000FF0 | H1 H1 H1 H1 -- -- -- -- -- -- -- -- -- -- -- --
 ----------------------------------------------------------
-000012C0 | -- -- -- -- -- -- -- -- -- -- H1 H1 H1 H1 H1 H1
-000012D0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000012D0 | -- -- -- -- -- -- -- -- -- -- H1 H1 H1 H1 H1 H1
 000012E0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 000012F0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 00001300 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1

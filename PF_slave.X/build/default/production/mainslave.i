@@ -2653,11 +2653,10 @@ extern __bank0 __bit __timeout;
 
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.35\\pic\\include\\c90\\stdint.h" 1 3
 # 26 "mainslave.c" 2
-# 37 "mainslave.c"
-char val_temp = 0;
-char POT1_slave = 0, POT2_slave = 0;
+# 36 "mainslave.c"
+char val_temp = 0, POT1_slave = 0, POT2_slave = 0, SERIAL = 0, POT_compu = 0;;
 unsigned short CCPR = 0, CCPR_2;
-uint8_t cont = 0, modo = 0;
+uint8_t cont = 0, modo = 0, selector = 0, POTc = 0, flag = 0;
 
 
 void setup(void);
@@ -2670,11 +2669,6 @@ void __attribute__((picinterrupt(("")))) isr (void){
 
         val_temp = SSPBUF;
 
-        if(modo == 2){
-            CCPR1L = (uint8_t)(val_temp>>2);
-            CCP1CONbits.DC1B = val_temp & 0b11;
-        }
-        else{
             if (cont == 0){
                 CCPR = map(val_temp, 0, 255, 60, 130);
                 CCPR1L = (uint8_t)(CCPR>>2);
@@ -2689,9 +2683,12 @@ void __attribute__((picinterrupt(("")))) isr (void){
                 CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
                 cont = 0;
             }
-        }
 
         PIR1bits.SSPIF = 0;
+    }
+
+    if(PIR1bits.RCIF){
+        SERIAL = RCREG;
     }
 
     if (INTCONbits.RBIF){
@@ -2712,7 +2709,30 @@ void main(void) {
     while(1){
 
 
-        PORTE = modo;
+        if (SERIAL == 0 || SERIAL == 1){
+            flag = 0;
+
+        }
+        else if (SERIAL == 2 || SERIAL == 3){
+            flag = 1;
+            selector = SERIAL;
+        }
+        else
+            POTc = SERIAL;
+
+        if (flag){
+            switch(selector){
+                case 2:
+                    CCPR1L = (POTc>>2);
+                    CCP1CONbits.DC1B = POTc & 0b11;;
+                    break;
+                case 3:
+                    CCPR2L = (POTc>>2);
+                    CCP2CONbits.DC2B0 = POTc & 0b01;
+                    CCP2CONbits.DC2B0 = (POTc & 0b10)>>1;
+                    break;
+            }
+        }
     }
     return;
 }
@@ -2766,7 +2786,9 @@ void setup(void){
 
 
 
-    TRISC = 0b00011000;
+    TRISCbits.TRISC4 = 1;
+    TRISCbits.TRISC3 = 1;
+    TRISCbits.TRISC5 = 0;
     PORTC = 0;
 
 
@@ -2777,12 +2799,29 @@ void setup(void){
     SSPSTATbits.CKE = 1;
     SSPSTATbits.SMP = 0;
 
+
+
+    TXSTAbits.SYNC = 0;
+    TXSTAbits.BRGH = 1;
+    BAUDCTLbits.BRG16 = 1;
+
+    SPBRG = 25;
+    SPBRGH = 0;
+
+    RCSTAbits.SPEN = 1;
+    RCSTAbits.RX9 = 0;
+
+    TXSTAbits.TXEN = 1;
+    RCSTAbits.CREN = 1;
+
     PIR1bits.SSPIF = 0;
     PIE1bits.SSPIE = 1;
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
     INTCONbits.RBIE = 1;
     INTCONbits.RBIF = 0;
+    PIE1bits.RCIE = 1;
+
 
     return;
 }

@@ -2656,7 +2656,8 @@ extern __bank0 __bit __timeout;
 # 37 "main_master.c"
 char val_temp = 0, POT1_slave = 0, POT2_slave = 0, SERIAL = 0, POT_compu = 0;
 unsigned short CCPR = 0, CCPR_2 = 0;
-uint8_t canal = 0, address = 0, MODO = 0, write_fg = 0, read_fg = 0, selector = 0, POTc = 0, aviso = 0;
+uint8_t canal = 0, address = 0, MODO = 0;
+uint8_t write_fg = 0, read_fg = 0, selector = 0, POTc = 0, flag = 0;
 char array[4] = {};
 
 
@@ -2808,8 +2809,10 @@ void main(void) {
                         address++;
                     }
 
+
                     CCPR1L = (array[0]>>2);
                     CCP1CONbits.DC1B = array[0] & 0b11;
+
 
                     CCPR2L = (array[1]>>2);
                     CCP2CONbits.DC2B0 = array[1] & 0b01;
@@ -2830,29 +2833,29 @@ void main(void) {
                 break;
 
             case 2:
-                PORTD = selector;
-                POT_compu = (uint8_t)(SERIAL & 0b00111111);
-                POTc = POT_compu + 60;
-                selector = (uint8_t)(SERIAL & 0b11000000);
-                switch(selector){
-                    case 0b00000000:
-                        CCPR1L = (POTc>>2);
-                        CCP1CONbits.DC1B = POTc & 0b11;;
-                        break;
-                    case 0b01000000:
-                        CCPR2L = (POTc>>2);
-                        CCP2CONbits.DC2B0 = POTc & 0b01;
-                        CCP2CONbits.DC2B0 = (POTc & 0b10)>>1;
-                        break;
-                    case 0b10000000:
 
-                        SSPBUF = POTc;
-                        while(!SSPSTATbits.BF){}
-                        _delay((unsigned long)((40)*(1000000/4000.0)));
-                        break;
-                    case 0b11000000:
-# 243 "main_master.c"
-                        break;
+                if (SERIAL == 0 || SERIAL == 1){
+                    flag = 1;
+                    selector = SERIAL;
+                }
+                else if (SERIAL == 2 || SERIAL == 3){
+                    flag = 0;
+                }
+                else
+                    POTc = SERIAL;
+
+                if (flag){
+                    switch(selector){
+                        case 0:
+                            CCPR1L = (POTc>>2);
+                            CCP1CONbits.DC1B = POTc & 0b11;;
+                            break;
+                        case 1:
+                            CCPR2L = (POTc>>2);
+                            CCP2CONbits.DC2B0 = POTc & 0b01;
+                            CCP2CONbits.DC2B0 = (POTc & 0b10)>>1;
+                            break;
+                    }
                 }
         }
     }
@@ -2946,7 +2949,6 @@ void setup(void){
 
     RCSTAbits.SPEN = 1;
     RCSTAbits.RX9 = 0;
-
 
     TXSTAbits.TXEN = 1;
     RCSTAbits.CREN = 1;

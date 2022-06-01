@@ -27,17 +27,15 @@
 
 // CONSTANTES ------------------------------------------------------------------
 #define _XTAL_FREQ 1000000
-#define FLAG_SPI 0xFF
 #define IN_MIN 0            // Valor minimo de entrada del potenciometro
 #define IN_MAX 255          // Valor máximo de entrada del potenciometro
 #define OUT_MIN 60          // Valor minimo de ancho de pulso de señal PWM
 #define OUT_MAX 130        // Valor máximo de ancho de pulso de señal PWM
 
 // VARIABLES -------------------------------------------------------------------
-char val_temp = 0;
-char POT1_slave = 0, POT2_slave = 0;
+char val_temp = 0, POT1_slave = 0, POT2_slave = 0, SERIAL = 0, POT_compu = 0;;
 unsigned short CCPR = 0, CCPR_2;   // Variable para almacenar ancho de pulso al hacer la interpolación lineal
-uint8_t cont = 0, modo = 0;
+uint8_t cont = 0, modo = 0, selector = 0, POTc = 0, flag = 0;
 
 // PROTOTIPO DE FUNCIONES ------------------------------------------------------
 void setup(void);
@@ -46,41 +44,39 @@ unsigned short map(uint8_t val, uint8_t in_min, uint8_t in_max,
 
 // INTERRUPCIONES --------------------------------------------------------------
 void __interrupt() isr (void){
-    if (PIR1bits.SSPIF){
+    if (PIR1bits.SSPIF){        // Verificar interrupción del SPI
            
-        val_temp = SSPBUF;
+        val_temp = SSPBUF;      // Recuperar valor de la comunicación SPI
         
-        if(modo == 2){
-            CCPR1L = (uint8_t)(val_temp>>2);    // Guardar los 8 bits mas significativos en CPR1L
-            CCP1CONbits.DC1B = val_temp & 0b11; // Guardar los 2 bits menos significativos en DC1B
-        }
-        else{
-            if (cont == 0){
+            if (cont == 0){     // Evaluar bandera para determinar si se quiere controlar el primer servo del slave
                 CCPR = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX);
                 CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
                 CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
                 cont = 1;
             }
 
-            else if (cont == 1){
+            else if (cont == 1){    // Evaluar bandera para determinar si se quiere controlar el segundo servo del slave
                 CCPR_2 = map(val_temp, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
                 CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
                 CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
                 CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
                 cont = 0;
             }
-        }
         
-        PIR1bits.SSPIF = 0;             // Limpiamos bandera de interrupción
+        PIR1bits.SSPIF = 0;     // Limpiar bandera de interrupción
     }
     
-    if (INTCONbits.RBIF){      // Verificar si ocurrió interrupción del PORTB
-        if (!PORTBbits.RB0){
-            modo++;
-            if (modo > 2)
+    if(PIR1bits.RCIF){
+        SERIAL = RCREG;         // Guardar valor de la comunicación serial con la PC
+    }
+    
+    if (INTCONbits.RBIF){       // Verificar si ocurrió interrupción del PORTB
+        if (!PORTBbits.RB0){    // Evaluar si se presionó el boton en RB0
+            modo++;             // Cambiar de modo
+            if (modo > 2)       // Reiniciar modo si es mayor a 2
                 modo = 0;
         }
-        INTCONbits.RBIF = 0;        // Limpiar bandera de interrupción del PORTB
+        INTCONbits.RBIF = 0;    // Limpiar bandera de interrupción del PORTB
     }
     
     return;
@@ -91,8 +87,31 @@ void main(void) {
     setup();
     while(1){        
         // Envio y recepcion de datos en maestro
-        //PORTB = CCPR1L;
-        PORTE = modo;
+        //PORTE = modo;
+        if (SERIAL == 0 || SERIAL == 1){    // Verificar si se quieren controlar los servos del máster
+            flag = 0;                       // Desactviar bandera para control
+
+        }
+        else if (SERIAL == 2 || SERIAL == 3){   // Verificar si se quieren controlar los servos del slave
+            flag = 1;                           // Activar bandera para control
+            selector = SERIAL;                  // Asignar el serial (boton) a la variable que selecciona los servos
+        }
+        else
+            POTc = SERIAL;                  // Asigar valor de la perilla a la variable POTc
+                
+        if (flag){
+            switch(selector){           // Evaluar cuál de los dos servos del máster se esta moviendo con la interfaz
+                case 2:        // Para el servo 1...
+                    CCPR1L = (POTc>>2);                 // Guardar los 8 bits mas significativos en CPR1L
+                    CCP1CONbits.DC1B = POTc & 0b11;;    // Guardar los 2 bits menos significativos en DC1B
+                    break;
+                case 3:        // Para el servo 2... 
+                    CCPR2L = (POTc>>2);                 // Guardar los 8 bits mas significativos en CPR2L
+                    CCP2CONbits.DC2B0 = POTc & 0b01;    // Guardar los 2 bits menos significativos en DC2B
+                    CCP2CONbits.DC2B0 = (POTc & 0b10)>>1;
+                    break;
+            }
+        }
     }
     return;
 }
@@ -146,7 +165,9 @@ void setup(void){
     
     // Configuracion de SPI
     // Configs del esclavo
-    TRISC = 0b00011000; // -> SDI y SCK entradas, SD0 como salida
+    TRISCbits.TRISC4 = 1;       // SDI y SCK entradas, SD0 como salida
+    TRISCbits.TRISC3 = 1;
+    TRISCbits.TRISC5 = 0;
     PORTC = 0;
 
     // SSPCON <5:0>
@@ -157,12 +178,29 @@ void setup(void){
     SSPSTATbits.CKE = 1;        // Dato enviado cada flanco de subida
     SSPSTATbits.SMP = 0;        // Dato al final del pulso de reloj
 
+    //Configuración de comunicacion serial
+    //SYNC = 0, BRGH = 1, BRG16 = 1, SPBRG=25 <- Valores de tabla 12-5
+    TXSTAbits.SYNC = 0;         // Comunicación ascincrona (full-duplex)
+    TXSTAbits.BRGH = 1;         // Baud rate de alta velocidad 
+    BAUDCTLbits.BRG16 = 1;      // 16-bits para generar el baud rate
+    
+    SPBRG = 25;
+    SPBRGH = 0;                 // Baud rate ~9600, error -> 0.16%
+    
+    RCSTAbits.SPEN = 1;         // Habilitar comunicación
+    RCSTAbits.RX9 = 0;          // Utilizar solo 8 bits para recepción 
+    
+    TXSTAbits.TXEN = 1;       // Habilitar transmisor
+    RCSTAbits.CREN = 1;         // Habilitar receptor
+    
     PIR1bits.SSPIF = 0;         // Limpiar bandera de SPI
     PIE1bits.SSPIE = 1;         // Habilitar int. de SPI
     INTCONbits.PEIE = 1;        // Habilitar int. de periféricos
     INTCONbits.GIE = 1;         // Habilitar int. globales
     INTCONbits.RBIE = 1;        // Habilitar int. del PORTB
     INTCONbits.RBIF = 0;        // Limpiar bandera del PORTB
+    PIE1bits.RCIE = 1;          // Habilitar Interrupciones de recepción
+
     
     return;
 }

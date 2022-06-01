@@ -31,12 +31,13 @@
 #define IN_MIN 0            // Valor minimo de entrada del potenciometro
 #define IN_MAX 255          // Valor máximo de entrada del potenciometro
 #define OUT_MIN 60          // Valor minimo de ancho de pulso de señal PWM
-#define OUT_MAX 130        // Valor máximo de ancho de pulso de señal PWM
+#define OUT_MAX 130         // Valor máximo de ancho de pulso de señal PWM
 
 //VARIABLES --------------------------------------------------------------------
 char val_temp = 0, POT1_slave = 0, POT2_slave = 0, SERIAL = 0, POT_compu = 0;
 unsigned short CCPR = 0, CCPR_2 = 0;    // Variable para almacenar ancho de pulso al hacer la interpolación lineal
-uint8_t canal = 0, address = 0, MODO = 0, write_fg = 0, read_fg = 0, selector = 0, POTc = 0, aviso = 0;
+uint8_t canal = 0, address = 0, MODO = 0;
+uint8_t write_fg = 0, read_fg = 0, selector = 0, POTc = 0, flag = 0;
 char array[4] = {};
 
 // PROTOTIPO DE FUNCIONES ------------------------------------------------------
@@ -48,70 +49,70 @@ void write_EEPROM(uint8_t address, uint8_t data);
 
 // INTERRUPCIONES --------------------------------------------------------------
 void __interrupt() isr (void){
-    if (PIR1bits.SSPIF){
+    if (PIR1bits.SSPIF){            // Verificar interrupción del SPI
         PIR1bits.SSPIF = 0;         // Limpiar bandera de interrupción del SPI
     }
     
     if(PIR1bits.ADIF){              // Verificar si ocurrió interrupción del ADC
         if (MODO == 0){
-            switch(canal){              // Evaluar canal que produjo la interrupción
+            switch(canal){          // Evaluar canal que produjo la interrupción
                 case 0:
-                        CCPR = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor del ancho de pulso
-                        CCPR1L = (uint8_t)(CCPR>>2);    // Guardar los 8 bits mas significativos en CPR1L
-                        CCP1CONbits.DC1B = CCPR & 0b11; // Guardar los 2 bits menos significativos en DC1B
-                        array[0] = (char)CCPR;
+                        CCPR = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX);   // Obtener valor del ancho de pulso
+                        CCPR1L = (uint8_t)(CCPR>>2);        // Guardar los 8 bits mas significativos en CPR1L
+                        CCP1CONbits.DC1B = CCPR & 0b11;     // Guardar los 2 bits menos significativos en DC1B
+                        array[0] = (char)CCPR;              // Guardar valor en el array que se utiliza para escribir/leer
                     break;
                 case 1:
                         CCPR_2 = map(ADRESH, IN_MIN, IN_MAX, OUT_MIN, OUT_MAX); // Obtener valor de ancho de pulso
-                        CCPR2L = (uint8_t)(CCPR_2>>2);      // Guardar los 8 bits mas significativos en CPR2L
-                        CCP2CONbits.DC2B0 = CCPR_2 & 0b01;  // Guardar los 2 bits menos significativos en DC2B
-                        CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;
-                        array[1] = (char)CCPR_2;
+                        CCPR2L = (uint8_t)(CCPR_2>>2);              // Guardar los 8 bits mas significativos en CPR2L
+                        CCP2CONbits.DC2B0 = CCPR_2 & 0b01;          // Guardar los 2 bits menos significativos en DC2B
+                        CCP2CONbits.DC2B0 = (CCPR_2 & 0b10)>>1;     
+                        array[1] = (char)CCPR_2;                    // Guardar valor en el array que se utiliza para escribir/leer
                     break;
                 case 2:
-                    POT1_slave = ADRESH;
-                        array[2] = POT1_slave;
+                    POT1_slave = ADRESH;            // Guardar valor para luego enviarlo al slave 
+                        array[2] = POT1_slave;      // Guardar valor en el array que se utiliza para escribir/leer
                     break;
-                case 3:
-                    POT2_slave = ADRESH;
-                        array[3] = POT2_slave;
+                case 3: 
+                    POT2_slave = ADRESH;            // Guardar valor para luego enviarlo al slave 
+                        array[3] = POT2_slave;      // Guardar valor en el array que se utiliza para escribir/leer
                     break; 
             }
         }
         PIR1bits.ADIF = 0;          // Limpiar bandera de interrupción del ADC
     }
     
-    if (INTCONbits.RBIF){      // Verificar si ocurrió interrupción del PORTB
-        if (!PORTBbits.RB0){
-            MODO++;
-            if (MODO > 2)
+    if (INTCONbits.RBIF){           // Verificar si ocurrió interrupción del PORTB
+        if (!PORTBbits.RB0){        // Evaluar si se presionó el botón en RB0
+            MODO++;                 // Incrementar contador de "MODO"
+            if (MODO > 2)           // Reiniciar contador de MODO si es mayor a 2
                 MODO = 0;
         }
         
-        else if (!PORTBbits.RB1){
-            switch(MODO){
-                case 0:
-                    write_fg = 1;
-                    address = 0x00;
+        else if (!PORTBbits.RB1){   // Evaluar si se presionó el botón en RB1
+            switch(MODO){           // Evaluar el modo actual
+                case 0:             // En el modo 0 ...
+                    write_fg = 1;       // Activar bandera para escritura en la EEPROM
+                    address = 0x00;     // Setear dirección inicial para escritura
                     break;
-                case 1:
-                    read_fg = 1;
-                    address = 0x00;
+                case 1:             // En el modo 1 ...
+                    read_fg = 1;        // Activar bandera para lectura de la EEPROM
+                    address = 0x00;     // Setear dirección incial para lectura
                     break;
                 case 2:
                     break;
             }
         }
         
-        else if (!PORTBbits.RB2){
-            switch(MODO){
-                case 0:
-                    write_fg = 1;
-                    address = 0x05;
+        else if (!PORTBbits.RB2){   // Evaluar si se presionó el botón en RB2
+            switch(MODO){           // Evaluar el modo actual
+                case 0:             // En el modo 0 ...
+                    write_fg = 1;       // Activar bandera para escritura en la EEPROM
+                    address = 0x05;     // Setear dirección inicial para escritura 
                     break;
-                case 1:
-                    read_fg = 1;
-                    address = 0x05;
+                case 1:             // En el modo 1 ...
+                    read_fg = 1;        // Activar bandera para lectura de la EEPROM
+                    address = 0x05;     // Setear dirección inicial para lectura 
                     break;
                 case 2:
                     break;
@@ -121,8 +122,8 @@ void __interrupt() isr (void){
         INTCONbits.RBIF = 0;        // Limpiar bandera de interrupción del PORTB
     }
     
-    if(PIR1bits.RCIF){
-        SERIAL = RCREG;
+    if(PIR1bits.RCIF){          // Verificar si la interfaz transmitió un dato
+        SERIAL = RCREG;         // Leer y guardar el dato de la interfaz
     }
     
     return;
@@ -133,10 +134,10 @@ void main(void) {
     setup();
     while(1){        
         
-        PORTE = MODO;
+        PORTE = MODO;       // Mostrar estado actual en el PORTE
         
-        switch(MODO){
-            case 0:
+        switch(MODO){       // Evaluar el MODO acutal
+            case 0:         // En el modo 0 ...
                 
                 if(ADCON0bits.GO == 0){             // Verificar qeu no hay proceso de conversión
                     if(ADCON0bits.CHS == 0){
@@ -160,87 +161,81 @@ void main(void) {
                 }
                 
                 // Enviar dato del POT3
-                SSPBUF = POT1_slave;            // Cargar valor del potenciómetro al buffer
-                while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-                __delay_ms(40);
+                SSPBUF = POT1_slave;        // Cargar valor del potenciómetro al buffer
+                while(!SSPSTATbits.BF){}    // Esperar a que termine el envio
+                __delay_ms(40);             // Delay de 40 ms para dar tiempo al slave
 
                 // Enviar dato del POT4
-                SSPBUF = POT2_slave;            // Cargar valor del potenciómetro al buffer
-                while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
-                __delay_ms(40);
+                SSPBUF = POT2_slave;        // Cargar valor del potenciómetro al buffer
+                while(!SSPSTATbits.BF){}    // Esperar a que termine el envio
+                __delay_ms(40);             // Delay de 40 ms para dar tiempo al slave
                 
-                if (write_fg){
-                    for (int i=0; i<4; ++i){
+                if (write_fg){              // Evaluar si la bandera de escritura está activa
+                    for (int i=0; i<4; ++i){        // Ciclo que recorre el array que contiene los valores a guardar
                         write_EEPROM(address, (uint8_t)array[i]);    // Escribir en la EEPROM
-                        __delay_ms(25);
-                        address++;
+                        __delay_ms(25);     // Delay de 25 ms
+                        address++;          // Incrementar la variable address para guardar en la siguiente dirección
                     }
-                    write_fg = 0;
+                    write_fg = 0;           // Apagar bandera de escritura en la EEPROM
                 }
                 break;
                 
-            case 1:
+            case 1:         // En el modo 1...
                 
-                if (read_fg){
-                    for (int j=0; j<4; ++j){
+                if (read_fg){               // Evaluar si la bandera de lectura está activa
+                    for (int j=0; j<4; ++j){        // Ciclo que guarda en el array los valores a leer
                         array[j] = read_EEPROM(address);    // Leer de la EEPROM
-                        __delay_ms(25);
-                        address++;
+                        __delay_ms(25);             
+                        address++;          // Incrementar la variable address para leer la siguiente dirección
                     }
                     
-                    CCPR1L = (array[0]>>2);    // Guardar los 8 bits mas significativos en CPR1L
+                    // Reproducir posición del servo 1
+                    CCPR1L = (array[0]>>2);             // Guardar los 8 bits mas significativos en CPR1L
                     CCP1CONbits.DC1B = array[0] & 0b11; // Guardar los 2 bits menos significativos en DC1B
                     
-                    CCPR2L = (array[1]>>2);      // Guardar los 8 bits mas significativos en CPR2L
-                    CCP2CONbits.DC2B0 = array[1] & 0b01;  // Guardar los 2 bits menos significativos en DC2B
+                    // Reproducir posición del servo 2
+                    CCPR2L = (array[1]>>2);                 // Guardar los 8 bits mas significativos en CPR2L
+                    CCP2CONbits.DC2B0 = array[1] & 0b01;    // Guardar los 2 bits menos significativos en DC2B
                     CCP2CONbits.DC2B0 = (array[1] & 0b10)>>1;
                     
-                    // Enviar dato del POT3
-                    SSPBUF = array[2];            // Cargar valor del potenciómetro al buffer
-                    while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
-                    __delay_ms(40);
+                    // Enviar y reproducir posición del servo 3 al slave 
+                    SSPBUF = array[2];              // Cargar valor del potenciómetro al buffer
+                    while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
+                    __delay_ms(40);                 // Delay de 40 ms para dar tiempo al slave
 
-                    // Enviar dato del POT4
-                    SSPBUF = array[3];            // Cargar valor del potenciómetro al buffer
-                    while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
-                    __delay_ms(40);
+                    // Enviar y reproducir posición del servo 4 al slave 
+                    SSPBUF = array[3];              // Cargar valor del potenciómetro al buffer
+                    while(!SSPSTATbits.BF){}        // Esperar a que termine el envio
+                    __delay_ms(40);                 // Delay de 40 ms para dar tiempo al slave
                     
-                    read_fg = 0;
+                    read_fg = 0;        // Apagar bandera de lectura de la EEPROM
                 }        
                 break;
                 
             case 2:
-                PORTD = selector;
-                POT_compu = (uint8_t)(SERIAL & 0b00111111);
-                POTc = POT_compu + 60;
-                selector =  (uint8_t)(SERIAL & 0b11000000);
-                switch(selector){
-                    case 0b00000000:
-                        CCPR1L = (POTc>>2);        // Guardar los 8 bits mas significativos en CPR1L
-                        CCP1CONbits.DC1B = POTc & 0b11;; // Guardar los 2 bits menos significativos en DC1B
-                        break;
-                    case 0b01000000:
-                        CCPR2L = (POTc>>2);    // Guardar los 8 bits mas significativos en CPR2L
-                        CCP2CONbits.DC2B0 = POTc & 0b01;          // Guardar los 2 bits menos significativos en DC2B
-                        CCP2CONbits.DC2B0 = (POTc & 0b10)>>1;
-                        break;
-                    case 0b10000000:                        
-                        // Enviar dato para el servo 3
-                        SSPBUF = POTc;                // Cargar valor del potenciómetro al buffer
-                        while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
-                        __delay_ms(40);
-                        break;
-                    case 0b11000000:
-                        /*/
-                        SSPBUF = selector;            // Cargar valor del potenciómetro al buffer
-                        while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
-                        __delay_ms(40);
-                        
-                        // Enviar dato para el servo 4
-                        SSPBUF = POTc;                // Cargar valor del potenciómetro al buffer
-                        while(!SSPSTATbits.BF){}      // Esperar a que termine el envio
-                        __delay_ms(40);*/
-                        break;
+                //PORTD = selector;
+                if (SERIAL == 0 || SERIAL == 1){                // Verificar si se quieren controlar los servos del máster
+                    flag = 1;                                   // Activar bandera para control
+                    selector = SERIAL;                          // Asignar el serial (boton) a la variable que selecciona los servos
+                }
+                else if (SERIAL == 2 || SERIAL == 3){           // Verificar si se quieren controlar los servos del slave
+                    flag = 0;                                   // Desactviar bandera para control
+                }
+                else
+                    POTc = SERIAL;                              // Asigar valor de la perilla a la variable POTc
+                
+                if (flag){
+                    switch(selector){   // Evaluar cuál de los dos servos del máster se esta moviendo con la interfaz
+                        case 0:         // Para el servo 1...
+                            CCPR1L = (POTc>>2);                 // Guardar los 8 bits mas significativos en CPR1L
+                            CCP1CONbits.DC1B = POTc & 0b11;;    // Guardar los 2 bits menos significativos en DC1B
+                            break;
+                        case 1:        // Para el servo 2... 
+                            CCPR2L = (POTc>>2);                 // Guardar los 8 bits mas significativos en CPR2L
+                            CCP2CONbits.DC2B0 = POTc & 0b01;    // Guardar los 2 bits menos significativos en DC2B
+                            CCP2CONbits.DC2B0 = (POTc & 0b10)>>1;
+                            break;
+                    }
                 }
         }
     }
@@ -248,7 +243,7 @@ void main(void) {
 }
 // CONFIGURACION ---------------------------------------------------------------
 void setup(void){
-    ANSEL = 0b00001111;         // AN0 - AN3 como entradas
+    ANSEL = 0b00001111;         // AN0 -> AN3 como entradas
     ANSELH = 0;                 // I/O digitales para el PORTB
     
     TRISB = 0b00000111;         // RB0 -> RB2 como entradas     
@@ -335,8 +330,7 @@ void setup(void){
     RCSTAbits.SPEN = 1;         // Habilitar comunicación
     RCSTAbits.RX9 = 0;          // Utilizar solo 8 bits para recepción 
     
-    
-    TXSTAbits.TXEN = 1;       // Habilitar transmisor
+    TXSTAbits.TXEN = 1;         // Habilitar transmisor
     RCSTAbits.CREN = 1;         // Habilitar receptor
     
     // Configuración de interrupciones
